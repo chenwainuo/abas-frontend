@@ -155,7 +155,6 @@ export const DepositUSDC: FC<DepositUSDCProps> = (props) => {
         <div>
             {<a target="_blank" href={`https://app.drift.trade/AVAX?authority=${props.butlerAccountOwner.toString()}`}> <button className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."> Drift Account </button></a>}
             {<a target="_blank" href={`https://trade.mango.markets/account?pubkey=${props.mangoAccount.toString()}`}><button className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."> Mango Account </button></a>}
-            {<a target="_blank" href={`https://p.datadoghq.com/sb/1e87a1b8-5085-11ec-a6b0-da7ad0900002-70b44d89dce3a234ead0846e06e707aa`}><button className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."> Dashboard</button></a>}
 
             <button
                 className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."
