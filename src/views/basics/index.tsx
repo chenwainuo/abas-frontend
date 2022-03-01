@@ -20,7 +20,6 @@ export const BasicsView: FC = ({ }) => {
   const butlerAccountOwner = useUserSOLBalanceStore((s) => s.butlerAccountOwner)
   const accountInitialized = useUserSOLBalanceStore((s) => s.accountInitialized)
   const positionUiRows = useUserSOLBalanceStore((s) => s.positionUi)
-  const userConfigMode = useUserSOLBalanceStore((s) => s.userConfigMode)
   const { getUserSOLBalance, getButlerProgram } = useUserSOLBalanceStore()
 
   useEffect(() => {
