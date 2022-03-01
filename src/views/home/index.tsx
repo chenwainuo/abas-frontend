@@ -44,7 +44,6 @@ export const HomeView: FC = ({ }) => {
             <CreateButlerAccount  show={!accountInitialized}/>
             <DepositUSDC  {... {mangoAccount, butlerAccountOwner, show: accountInitialized}}/>
             <AccountTable {... {mangoAccount, butlerAccountOwner, show: accountInitialized, rows:positionUiRows}}/>
-            <RebalanceCollateral  {... {mangoAccount, butlerAccountOwner, show: accountInitialized}}/>
           </div>
         </div>
       </div>

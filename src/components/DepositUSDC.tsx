@@ -87,7 +87,7 @@ export const DepositUSDC: FC<DepositUSDCProps> = (props) => {
 
         const program = await anchor.Program.at(BUTLER_PROGRAM_KEY, provider) as Program<Butler>
 
-        const quantityNative = new anchor.BN(1000 /2 * 1000000)
+        const quantityNative = new anchor.BN(100 /2 * 1000000)
 
         const userDriftCollateralAccount = await Token.getAssociatedTokenAddress(ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, USDC_MINT_KEY, publicKey)
 
@@ -160,7 +160,7 @@ export const DepositUSDC: FC<DepositUSDCProps> = (props) => {
                 className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."
                 onClick={onClick} disabled={!publicKey}
             >
-                <span> Deposit 1000 </span>
+                <span> Deposit 100 </span>
             </button>
         </div>
     );
