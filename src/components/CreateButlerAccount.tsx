@@ -149,7 +149,7 @@ export const CreateButlerAccount: FC<CreateButlerAccountProps> = (props) => {
                 className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."
                 onClick={onClick} disabled={!publicKey}
             >
-                <span> Create Butler Account </span>
+                <span> Create Abas Account </span>
             </button>
         </div>
     );
