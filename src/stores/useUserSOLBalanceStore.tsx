@@ -22,11 +22,11 @@ interface UserSOLBalanceStore extends State {
   mangoAccount: PublicKey,
   butlerAccountOwner: PublicKey,
   accountInitialized: boolean,
-  userConfigMode: number,
   positionUi: Array<PositionUiRow>,
   userConfig: UserConfigType
 }
 
+// @ts-ignore
 const useUserSOLBalanceStore = create<UserSOLBalanceStore>((set, _get) => {
   return {
     balance: 0,
@@ -73,8 +73,7 @@ const useUserSOLBalanceStore = create<UserSOLBalanceStore>((set, _get) => {
           BUTLER_PROGRAM_KEY
       )
       const positionsUi = []
-      let userConfigMode = -1
-      let userConfig: UserConfigTypes= {
+      let userConfig: UserConfigType = {
         closeSpread: 0, mode: 0, openSpread: 0, tradeSize: 0, userCranker: undefined, userWallet: undefined
       }
 
