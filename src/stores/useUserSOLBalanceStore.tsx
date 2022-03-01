@@ -12,7 +12,7 @@ import {
 } from "../models/constants";
 import {MangoAccount, MangoClient, MangoGroup, PerpMarket} from "@blockworks-foundation/mango-client";
 import {ClearingHouse, ClearingHouseUser} from "@drift-labs/sdk";
-import {PositionUiRow, UserConfig} from "../models/types";
+import {PositionUiRow, UserConfigType} from "../models/types";
 
 interface UserSOLBalanceStore extends State {
   balance: number;
@@ -24,7 +24,7 @@ interface UserSOLBalanceStore extends State {
   accountInitialized: boolean,
   userConfigMode: number,
   positionUi: Array<PositionUiRow>,
-  userConfig: UserConfig
+  userConfig: UserConfigType
 }
 
 const useUserSOLBalanceStore = create<UserSOLBalanceStore>((set, _get) => {
@@ -74,7 +74,7 @@ const useUserSOLBalanceStore = create<UserSOLBalanceStore>((set, _get) => {
       )
       const positionsUi = []
       let userConfigMode = -1
-      let userConfig: UserConfig= {
+      let userConfig: UserConfigTypes= {
         closeSpread: 0, mode: 0, openSpread: 0, tradeSize: 0, userCranker: undefined, userWallet: undefined
       }
 
