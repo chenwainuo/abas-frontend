@@ -10,7 +10,7 @@ import {RebalanceCollateral} from "../../components/RebalanceCollateral";
 import {AccountTable} from "../../components/AccountTable";
 import {UserConfig} from "../../components/UserConfig";
 
-export const HomeView: FC = ({ }) => {
+export const ConfigsView: FC = ({ }) => {
   const wallet = useWallet();
   const { connection } = useConnection();
 
@@ -20,7 +20,7 @@ export const HomeView: FC = ({ }) => {
   const butlerAccountOwner = useUserSOLBalanceStore((s) => s.butlerAccountOwner)
   const accountInitialized = useUserSOLBalanceStore((s) => s.accountInitialized)
   const positionUiRows = useUserSOLBalanceStore((s) => s.positionUi)
-  const userConfigMode = useUserSOLBalanceStore((s) => s.userConfigMode)
+  const userConfig = useUserSOLBalanceStore((s) => s.userConfig)
   const { getUserSOLBalance, getButlerProgram } = useUserSOLBalanceStore()
 
   useEffect(() => {
@@ -35,19 +35,16 @@ export const HomeView: FC = ({ }) => {
 
 
   return (
-      <div className="hero mx-auto p-4 min-h-16 py-4">
-        <div className="hero-content flex flex-col max-w-lg">
-          <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-tr from-[#9945FF] to-[#14F195]">
-            Abas
-          </h1>
-          {/* CONTENT GOES HERE */}
-          <div className="p-2 text-center">
-            <CreateButlerAccount  show={!accountInitialized}/>
-            <DepositUSDC  {... {mangoAccount, butlerAccountOwner, show: accountInitialized}}/>
-            <AccountTable {... {mangoAccount, butlerAccountOwner, show: accountInitialized, rows:positionUiRows}}/>
-            <RebalanceCollateral  {... {mangoAccount, butlerAccountOwner, show: accountInitialized}}/>
-          </div>
+    <div className="hero mx-auto p-4 min-h-16 py-4">
+      <div className="hero-content flex flex-col max-w-lg">
+        <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-tr from-[#9945FF] to-[#14F195]">
+          Abas
+        </h1>
+        {/* CONTENT GOES HERE */}
+        <div className="p-2 text-center">
+          <UserConfig  {... {mangoAccount, butlerAccountOwner,userConfig, show: accountInitialized}}/>
         </div>
       </div>
+    </div>
   );
 };

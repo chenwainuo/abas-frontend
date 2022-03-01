@@ -51,16 +51,10 @@ export const AppBar: FC = props => {
         <div className="navbar-center lg:flex">
           <div className="flex items-stretch">
             <Link href="/">
-              <a className="btn btn-ghost btn-sm rounded-btn">Home</a>
+              <a className="btn btn-ghost btn-sm rounded-btn">App</a>
             </Link>
-            <Link href="/basics">
-              <a className="btn btn-ghost btn-sm rounded-btn">Basics</a>
-            </Link>
-            <Link href="/token">
-              <a className="btn btn-ghost btn-sm rounded-btn">Token</a>
-            </Link>
-            <Link href="/nft">
-              <a className="btn btn-ghost btn-sm rounded-btn">NFT</a>
+            <Link href="/configs">
+              <a className="btn btn-ghost btn-sm rounded-btn">Configs</a>
             </Link>
           </div>
         </div>

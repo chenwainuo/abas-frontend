@@ -8,6 +8,7 @@ import { notify } from "../utils/notifications";
 export const SignMessage: FC = () => {
     const { publicKey, signMessage } = useWallet();
 
+
     const onClick = useCallback(async () => {
         try {
             // `publicKey` will be null if the wallet isn't connected
