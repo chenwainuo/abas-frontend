@@ -40,6 +40,11 @@ export const AccountTable: FC<AccountTable> = (props) => {
     if (!props.show || !props.butlerAccountOwner || !props.mangoAccount) {
         return <div></div>
     }
+
+    if (props.rows.length === 0) {
+        return (<a> No trade happened yet, try lowering open spread threshold </a>)
+    }
+
     return (
         <div>
             <table>
