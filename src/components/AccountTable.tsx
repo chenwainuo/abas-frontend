@@ -42,7 +42,10 @@ export const AccountTable: FC<AccountTable> = (props) => {
     }
 
     if (props.rows.length === 0) {
-        return (<a> No trade happened yet, try lowering open spread threshold </a>)
+        return ( <div>
+            <a> 👀 Abas keeper is workign hard to get a good price entry for you, patience is a virtue! </a>
+            <a> Meanwhile drop by our <a href={"http://discord.gg/4rNmEWNZU5"}>Discord</a> and say hi! </a>
+        </div>)
     }
 
     return (
