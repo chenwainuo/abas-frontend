@@ -82,7 +82,7 @@ export const AccountTable: FC<AccountTable> = (props) => {
                     <td></td>
                     <td></td>
                     <td>${props.rows.map(p => p.estFundingRev).reduce((a, b) => +a + +b, 0).toFixed(2)}</td>
-                    <td>${props.rows.map(p => p.estApr).reduce((a, b) => +a + +b, 0).toFixed(0)}</td>
+                    <td>{props.rows.map(p => p.estApr).reduce((a, b) => +a + +b, 0).toFixed(2)}%</td>
                     <td></td>
                 </tr>
                 </tbody>
