@@ -1,12 +1,21 @@
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import {Keypair, PublicKey, SystemProgram, Transaction, TransactionSignature} from '@solana/web3.js';
+import {Connection, Keypair, PublicKey, SystemProgram, Transaction, TransactionSignature} from '@solana/web3.js';
 import React, { FC, useCallback, useEffect } from 'react';
 import { notify } from "../utils/notifications";
 import {
     BUTLER_PROGRAM_KEY,
     DRIFT_PROGRAM_KEY,
-    DRIFT_STATE_KEY, MANGO_CACHE_KEY, MANGO_DRFIT_CONFIG, MANGO_GROUP_CONFIG_KEY,
-    MANGO_PROGRAM_KEY, MANGO_USDC_NODE_KEY, MANGO_USDC_ROOT_KEY, MANGO_USDC_VAULT, MangoDriftConfig, USDC_MINT_KEY,
+    DRIFT_STATE_KEY,
+    MANGO_CACHE_KEY,
+    MANGO_DRFIT_CONFIG,
+    MANGO_GROUP_CONFIG_KEY,
+    MANGO_PROGRAM_KEY,
+    MANGO_USDC_NODE_KEY,
+    MANGO_USDC_ROOT_KEY,
+    MANGO_USDC_VAULT,
+    MangoDriftConfig,
+    RPC_URL,
+    USDC_MINT_KEY,
 } from "../models/constants";
 import {Butler} from "../models/butler";
 import {BN, Program} from "@project-serum/anchor";
@@ -19,13 +28,14 @@ export type UserConfigProps = {
     show: boolean,
     mangoAccount: PublicKey,
     butlerAccountOwner: PublicKey,
-    userConfig: UserConfigType
+    userConfig: UserConfigType,
+    isLoading: boolean
 }
 
 
 
 export const UserConfig: FC<UserConfigProps> = (props) => {
-    const { connection } = useConnection();
+    const connection = new Connection(RPC_URL)
     const { publicKey, sendTransaction, wallet } = useWallet();
 
     const [userConfigMode, setUserConfigMode] = React.useState('');
@@ -76,8 +86,6 @@ export const UserConfig: FC<UserConfigProps> = (props) => {
         }
     }, [publicKey, notify, connection, sendTransaction]);
 
-
-    console.log("userConfig", props.userConfig)
 
     if (!props.show || !props.butlerAccountOwner || !props.mangoAccount) {
         return <div></div>

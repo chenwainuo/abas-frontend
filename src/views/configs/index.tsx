@@ -1,5 +1,5 @@
 
-import {FC, useEffect} from "react";
+import {FC, useEffect, useState} from "react";
 import { SignMessage } from '../../components/SignMessage';
 import { SendTransaction } from '../../components/SendTransaction';
 import {CreateButlerAccount} from "../../components/CreateButlerAccount";
@@ -9,30 +9,22 @@ import {DepositUSDC} from "../../components/DepositUSDC";
 import {RebalanceCollateral} from "../../components/RebalanceCollateral";
 import {AccountTable} from "../../components/AccountTable";
 import {UserConfig} from "../../components/UserConfig";
+import {Connection} from "@solana/web3.js";
+import {RPC_URL} from "../../models/constants";
+import {UserInfoData} from "../../pages/api/info/[user]";
+import useUserInfo from "../../hooks/userUserInfo";
 
 export const ConfigsView: FC = ({ }) => {
   const wallet = useWallet();
-  const { connection } = useConnection();
+  if (!wallet.publicKey) {
+    return <div/>
+  }
 
-  const balance = useUserSOLBalanceStore((s) => s.balance)
-  const butlerProgram = useUserSOLBalanceStore((s) => s.butlerProgram)
-  const mangoAccount = useUserSOLBalanceStore((s) => s.mangoAccount)
-  const butlerAccountOwner = useUserSOLBalanceStore((s) => s.butlerAccountOwner)
-  const accountInitialized = useUserSOLBalanceStore((s) => s.accountInitialized)
-  const positionUiRows = useUserSOLBalanceStore((s) => s.positionUi)
-  const userConfig = useUserSOLBalanceStore((s) => s.userConfig)
-  const { getUserSOLBalance, getButlerProgram } = useUserSOLBalanceStore()
+  const { data, isLoading } = useUserInfo(wallet.publicKey.toString())
 
-  useEffect(() => {
-    (async () => {
-      if (wallet.publicKey) {
-        console.log(wallet.publicKey.toBase58())
-        getUserSOLBalance(wallet.publicKey, connection)
-        getButlerProgram(connection, wallet.wallet)
-      }
-    })();
-  }, [wallet.publicKey, connection, getUserSOLBalance])
-
+  if (isLoading) {
+    return <div> Loading.... </div>
+  }
 
   return (
     <div className="hero mx-auto p-4 min-h-16 py-4">
@@ -42,7 +34,7 @@ export const ConfigsView: FC = ({ }) => {
         </h1>
         {/* CONTENT GOES HERE */}
         <div className="p-2 text-center">
-          <UserConfig  {... {mangoAccount, butlerAccountOwner,userConfig, show: accountInitialized}}/>
+          <UserConfig  {... {isLoading, mangoAccount: data.mangoAccount, butlerAccountOwner: data.butlerAccountOwner,userConfig: data.userConfig, show: data.accountInitialized}}/>
         </div>
       </div>
     </div>

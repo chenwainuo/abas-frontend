@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import { EndpointTypes } from '../models/types'
+import useSWR from "swr";
 
 export default function useQueryContext() {
   const router = useRouter()
@@ -19,3 +20,4 @@ export default function useQueryContext() {
     fmtUrlWithCluster,
   }
 }
+

@@ -1,6 +1,6 @@
 import {useConnection, useWallet} from '@solana/wallet-adapter-react';
 import {PublicKey, Transaction, TransactionSignature} from '@solana/web3.js';
-import {FC, useCallback} from 'react';
+import {FC, useCallback, useEffect, useState} from 'react';
 import {notify} from "../utils/notifications";
 import {
     BUTLER_PROGRAM_KEY,
@@ -20,6 +20,7 @@ import {MangoClient} from "@blockworks-foundation/mango-client";
 import useUserSOLBalanceStore from "../stores/useUserSOLBalanceStore";
 import {PositionUiRow} from "../models/types";
 import {EmergencyCloseButton} from "./EmergencyCloseButton";
+import {UserInfoData} from "../pages/api/info/[user]";
 export type ButlerTableRow = {
 
 }
@@ -32,11 +33,6 @@ export type AccountTable = {
 }
 
 export const AccountTable: FC<AccountTable> = (props) => {
-    const {connection} = useConnection();
-    const {publicKey, sendTransaction, wallet} = useWallet();
-    const accountInitialized = useUserSOLBalanceStore((s) => s.accountInitialized)
-    const { getUserSOLBalance, getButlerProgram } = useUserSOLBalanceStore()
-
     if (!props.show || !props.butlerAccountOwner || !props.mangoAccount) {
         return <div></div>
     }

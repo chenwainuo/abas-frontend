@@ -1,5 +1,7 @@
+
 import {PublicKey} from "@solana/web3.js";
 
+export const RPC_URL = "http://api.mainnet-beta.solana.com/"
 export const MANGO_PROGRAM_KEY = new PublicKey("mv3ekLzLbnVPNxjSKvqBpU3ZeZXPQdEC3bp5MDEBG68")
 export const MANGO_GROUP_CONFIG_KEY = new PublicKey("98pjRuQjK3qA6gXts96PqZT4Ze5QmnCmt3QYjhbUSPue")
 export const USDC_MINT_KEY = new PublicKey("EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v")

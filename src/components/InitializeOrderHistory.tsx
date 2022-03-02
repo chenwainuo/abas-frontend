@@ -1,12 +1,21 @@
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import {Keypair, PublicKey, SystemProgram, Transaction, TransactionSignature} from '@solana/web3.js';
+import {Connection, Keypair, PublicKey, SystemProgram, Transaction, TransactionSignature} from '@solana/web3.js';
 import { FC, useCallback } from 'react';
 import { notify } from "../utils/notifications";
 import {
     BUTLER_PROGRAM_KEY,
     DRIFT_PROGRAM_KEY,
-    DRIFT_STATE_KEY, MANGO_CACHE_KEY, MANGO_DRFIT_CONFIG, MANGO_GROUP_CONFIG_KEY,
-    MANGO_PROGRAM_KEY, MANGO_USDC_NODE_KEY, MANGO_USDC_ROOT_KEY, MANGO_USDC_VAULT, MangoDriftConfig, USDC_MINT_KEY,
+    DRIFT_STATE_KEY,
+    MANGO_CACHE_KEY,
+    MANGO_DRFIT_CONFIG,
+    MANGO_GROUP_CONFIG_KEY,
+    MANGO_PROGRAM_KEY,
+    MANGO_USDC_NODE_KEY,
+    MANGO_USDC_ROOT_KEY,
+    MANGO_USDC_VAULT,
+    MangoDriftConfig,
+    RPC_URL,
+    USDC_MINT_KEY,
 } from "../models/constants";
 import {Butler} from "../models/butler";
 import {BN, Program} from "@project-serum/anchor";
@@ -20,7 +29,7 @@ export type DepositUSDCProps = {
 }
 
 export const InitializeOrderHistory: FC<DepositUSDCProps> = (props) => {
-    const { connection } = useConnection();
+    const connection = new Connection(RPC_URL)
     const wallet = useWallet();
     const publicKey = wallet.publicKey;
     const sendTransaction = wallet.sendTransaction

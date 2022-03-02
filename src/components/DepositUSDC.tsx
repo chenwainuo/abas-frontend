@@ -145,9 +145,6 @@ export const DepositUSDC: FC<DepositUSDCProps> = (props) => {
         }
     }, [publicKey, notify, connection, sendTransaction]);
 
-
-    console.log(props)
-
     if (!props.show || !props.butlerAccountOwner || !props.mangoAccount) {
         return <div></div>
     }

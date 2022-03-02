@@ -1,5 +1,5 @@
 
-import {FC, useEffect} from "react";
+import {FC, useEffect, useState} from "react";
 import { SignMessage } from '../../components/SignMessage';
 import { SendTransaction } from '../../components/SendTransaction';
 import {CreateButlerAccount} from "../../components/CreateButlerAccount";
@@ -9,28 +9,23 @@ import {DepositUSDC} from "../../components/DepositUSDC";
 import {RebalanceCollateral} from "../../components/RebalanceCollateral";
 import {AccountTable} from "../../components/AccountTable";
 import {UserConfig} from "../../components/UserConfig";
+import {Connection} from "@solana/web3.js";
+import {RPC_URL} from "../../models/constants";
+import {UserInfoData} from "../../pages/api/info/[user]";
+import useUserInfo from "../../hooks/userUserInfo";
 
 export const HomeView: FC = ({ }) => {
   const wallet = useWallet();
-  const { connection } = useConnection();
 
-  const balance = useUserSOLBalanceStore((s) => s.balance)
-  const butlerProgram = useUserSOLBalanceStore((s) => s.butlerProgram)
-  const mangoAccount = useUserSOLBalanceStore((s) => s.mangoAccount)
-  const butlerAccountOwner = useUserSOLBalanceStore((s) => s.butlerAccountOwner)
-  const accountInitialized = useUserSOLBalanceStore((s) => s.accountInitialized)
-  const positionUiRows = useUserSOLBalanceStore((s) => s.positionUi)
-  const { getUserSOLBalance, getButlerProgram } = useUserSOLBalanceStore()
+  if (!wallet.publicKey) {
+    return <div/>
+  }
 
-  useEffect(() => {
-    (async () => {
-      if (wallet.publicKey) {
-        console.log(wallet.publicKey.toBase58())
-        getUserSOLBalance(wallet.publicKey, connection)
-        getButlerProgram(connection, wallet.wallet)
-      }
-    })();
-  }, [wallet.publicKey, connection, getUserSOLBalance])
+  const { data, isLoading } = useUserInfo(wallet.publicKey.toString())
+
+  if (isLoading) {
+    return <div> Loading.... </div>
+  }
 
 
   return (
@@ -41,9 +36,9 @@ export const HomeView: FC = ({ }) => {
           </h1>
           {/* CONTENT GOES HERE */}
           <div className="p-2 text-center">
-            <CreateButlerAccount  show={!accountInitialized}/>
-            <DepositUSDC  {... {mangoAccount, butlerAccountOwner, show: accountInitialized}}/>
-            <AccountTable {... {mangoAccount, butlerAccountOwner, show: accountInitialized, rows:positionUiRows}}/>
+            <CreateButlerAccount  show={!data.accountInitialized && !isLoading}/>
+            <DepositUSDC  {... {mangoAccount: data.mangoAccount, butlerAccountOwner: data.butlerAccountOwner, show: data.accountInitialized}}/>
+            <AccountTable {... {mangoAccount: data.mangoAccount, butlerAccountOwner: data.butlerAccountOwner, show: data.accountInitialized, rows:data.positionUi}}/>
           </div>
         </div>
       </div>

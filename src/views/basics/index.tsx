@@ -9,17 +9,14 @@ import {DepositUSDC} from "../../components/DepositUSDC";
 import {RebalanceCollateral} from "../../components/RebalanceCollateral";
 import {AccountTable} from "../../components/AccountTable";
 import {UserConfig} from "../../components/UserConfig";
+import {Connection} from "@solana/web3.js";
+import {RPC_URL} from "../../models/constants";
 
 export const BasicsView: FC = ({ }) => {
   const wallet = useWallet();
-  const { connection } = useConnection();
 
-  const balance = useUserSOLBalanceStore((s) => s.balance)
-  const butlerProgram = useUserSOLBalanceStore((s) => s.butlerProgram)
-  const mangoAccount = useUserSOLBalanceStore((s) => s.mangoAccount)
-  const butlerAccountOwner = useUserSOLBalanceStore((s) => s.butlerAccountOwner)
-  const accountInitialized = useUserSOLBalanceStore((s) => s.accountInitialized)
-  const positionUiRows = useUserSOLBalanceStore((s) => s.positionUi)
+  const connection = new Connection(RPC_URL)
+
   const { getUserSOLBalance, getButlerProgram } = useUserSOLBalanceStore()
 
   useEffect(() => {
