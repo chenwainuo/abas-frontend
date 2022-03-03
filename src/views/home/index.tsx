@@ -13,9 +13,12 @@ import {Connection} from "@solana/web3.js";
 import {RPC_URL} from "../../models/constants";
 import {UserInfoData} from "../../pages/api/info/[user]";
 import useUserInfo from "../../hooks/userUserInfo";
+import {publicKey} from "@solana/web3.js/src/layout";
 
 export const HomeView: FC = ({ }) => {
   const wallet = useWallet();
+
+  // const [refresh, setRefresh] = useState("");
 
   if (!wallet.publicKey) {
     return <div/>
@@ -36,11 +39,11 @@ export const HomeView: FC = ({ }) => {
           </h1>
           {/* CONTENT GOES HERE */}
           <div className="p-2 text-center">
-            <CreateButlerAccount  show={!data.accountInitialized && !isLoading}/>
+            <CreateButlerAccount  show={!data.accountInitialized && !isLoading} publicKey={wallet.publicKey}/>
             <DepositUSDC  {... {mangoAccount: data.mangoAccount, butlerAccountOwner: data.butlerAccountOwner, show: data.accountInitialized}}/>
             <AccountTable {... {mangoAccount: data.mangoAccount, butlerAccountOwner: data.butlerAccountOwner, show: data.accountInitialized, rows:data.positionUi}}/>
           </div>
         </div>
       </div>
   );
-};
+}

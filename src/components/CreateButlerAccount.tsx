@@ -1,5 +1,5 @@
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { Keypair, SystemProgram, Transaction, TransactionSignature } from '@solana/web3.js';
+import {Keypair, PublicKey, SystemProgram, Transaction, TransactionSignature} from '@solana/web3.js';
 import { FC, useCallback } from 'react';
 import { notify } from "../utils/notifications";
 import {
@@ -12,18 +12,21 @@ import {
 import {Butler} from "../models/butler";
 import {BN, Program} from "@project-serum/anchor";
 import {TOKEN_PROGRAM_ID} from "@solana/spl-token";
+import useUserInfo from "../hooks/userUserInfo";
 
 export type CreateButlerAccountProps = {
-    show: boolean
+    show: boolean,
+    publicKey: PublicKey
 }
 
 export const CreateButlerAccount: FC<CreateButlerAccountProps> = (props) => {
     const { connection } = useConnection();
-    const { publicKey, sendTransaction, wallet } = useWallet();
+    const { sendTransaction, wallet } = useWallet();
 
+    const { data, isLoading } = useUserInfo(props.publicKey.toString())
 
     const onClick = useCallback(async () => {
-        if (!publicKey) {
+        if (!props.publicKey) {
             notify({ type: 'error', message: `Wallet not connected!` });
             console.log('error', `Send Transaction: Wallet not connected!`);
             return;
@@ -31,12 +34,12 @@ export const CreateButlerAccount: FC<CreateButlerAccountProps> = (props) => {
         const anchor = require("@project-serum/anchor");
 
         const [accountOwner, accountOwnerBump] = await anchor.web3.PublicKey.findProgramAddress(
-            [Buffer.from(anchor.utils.bytes.utf8.encode("butler_account_owner_v1")), publicKey.toBuffer()],
+            [Buffer.from(anchor.utils.bytes.utf8.encode("butler_account_owner_v1")), props.publicKey.toBuffer()],
             BUTLER_PROGRAM_KEY
         )
 
         const [mangoAccountPk, mangoAccountBump] = await anchor.web3.PublicKey.findProgramAddress(
-            [Buffer.from(anchor.utils.bytes.utf8.encode("mango_account_v1")), publicKey.toBuffer()],
+            [Buffer.from(anchor.utils.bytes.utf8.encode("mango_account_v1")), props.publicKey.toBuffer()],
             BUTLER_PROGRAM_KEY
         )
 
@@ -45,7 +48,7 @@ export const CreateButlerAccount: FC<CreateButlerAccountProps> = (props) => {
             BUTLER_PROGRAM_KEY
         )
         const [userConfig, userConfigBump] = await anchor.web3.PublicKey.findProgramAddress(
-            [Buffer.from(anchor.utils.bytes.utf8.encode("butler_user_config_v1")), publicKey.toBuffer()],
+            [Buffer.from(anchor.utils.bytes.utf8.encode("butler_user_config_v1")), props.publicKey.toBuffer()],
             BUTLER_PROGRAM_KEY
         )
 
@@ -61,12 +64,12 @@ export const CreateButlerAccount: FC<CreateButlerAccountProps> = (props) => {
         );
 
         const [butlerDriftCollateralVault, butlerDriftCollateralBump] = await anchor.web3.PublicKey.findProgramAddress(
-            [Buffer.from(anchor.utils.bytes.utf8.encode("butler_drift_collateral_vault_v1")), publicKey.toBuffer()],
+            [Buffer.from(anchor.utils.bytes.utf8.encode("butler_drift_collateral_vault_v1")), props.publicKey.toBuffer()],
             BUTLER_PROGRAM_KEY
         )
 
         const [butlerMangoCollateralVault, butlerMangoCollateralBump] = await anchor.web3.PublicKey.findProgramAddress(
-            [Buffer.from(anchor.utils.bytes.utf8.encode("butler_mango_collateral_vault_v1")), publicKey.toBuffer()],
+            [Buffer.from(anchor.utils.bytes.utf8.encode("butler_mango_collateral_vault_v1")), props.publicKey.toBuffer()],
             BUTLER_PROGRAM_KEY
         )
         const provider = new anchor.Provider(connection, wallet);
@@ -92,7 +95,7 @@ export const CreateButlerAccount: FC<CreateButlerAccountProps> = (props) => {
                     mangoProgram: MANGO_PROGRAM_KEY,
                     mangoGroupPk: MANGO_GROUP_CONFIG_KEY,
                     mangoAccountPk: mangoAccountPk,
-                    signer: publicKey,
+                    signer: props.publicKey,
                     butlerAccountOwner: accountOwner,
                     systemProgram: anchor.web3.SystemProgram.programId,
                     tokenProgram: TOKEN_PROGRAM_ID,
@@ -106,7 +109,7 @@ export const CreateButlerAccount: FC<CreateButlerAccountProps> = (props) => {
                 accounts: {
                     state: state,
                     userConfig: userConfig,
-                    signer: publicKey,
+                    signer: props.publicKey,
                     systemProgram: anchor.web3.SystemProgram.programId,
                     rent: anchor.web3.SYSVAR_RENT_PUBKEY
                 }
@@ -121,7 +124,7 @@ export const CreateButlerAccount: FC<CreateButlerAccountProps> = (props) => {
                     clearingHouseProgram: DRIFT_PROGRAM_KEY,
                     clearingHouseUser: driftAccountPk,
                     clearingHouseUserOrders: driftUserOrdersPk,
-                    signer: publicKey,
+                    signer: props.publicKey,
                     systemProgram: anchor.web3.SystemProgram.programId,
                     rent: anchor.web3.SYSVAR_RENT_PUBKEY
                 }
@@ -129,17 +132,19 @@ export const CreateButlerAccount: FC<CreateButlerAccountProps> = (props) => {
 
             signature = await sendTransaction(new Transaction().add(createUserAccountIx).add(createUserConfigIx).add(createUserOrdersIx), connection, {signers: [driftUserPositionKeyPair]});
 
-            console.log("signature", signature)
             await connection.confirmTransaction(signature, 'confirmed');
+            await new Promise(f => setTimeout(f, 10000));
+            console.log("signature", signature)
             notify({ type: 'success', message: 'Transaction successful!', txid: signature });
+
         } catch (error: any) {
             notify({ type: 'error', message: `Transaction failed!`, description: error?.message, txid: signature });
             console.log('error', `Transaction failed! ${error?.message}`, signature);
             return;
         }
-    }, [publicKey, notify, connection, sendTransaction]);
+    }, [props.publicKey, notify, connection, sendTransaction]);
 
-    if (!props.show) {
+    if (!props.show || data.accountInitialized) {
         return <div/>
     }
 
@@ -147,7 +152,7 @@ export const CreateButlerAccount: FC<CreateButlerAccountProps> = (props) => {
         <div>
             <button
                 className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."
-                onClick={onClick} disabled={!publicKey}
+                onClick={onClick} disabled={!props.publicKey}
             >
                 <span> Create Abas Account </span>
             </button>

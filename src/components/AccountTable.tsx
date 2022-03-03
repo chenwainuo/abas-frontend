@@ -69,9 +69,6 @@ export const AccountTable: FC<AccountTable> = (props) => {
                         <td>{row.mangoFundingRate.toFixed(2)}%</td>
                         <td>${row.estFundingRev.toFixed(2)}</td>
                         <td>{row.estApr.toFixed(2)}%</td>
-                        <td><EmergencyCloseButton mangoAccount={props.mangoAccount} butlerAccountOwner={props.butlerAccountOwner}
-                                                  closingMarket={row.marketNamePerp}
-                                                  closingSize={row.mangoBase.valueOf()} show driftDirection={row.isDriftLong ? PositionDirection.SHORT : PositionDirection.LONG}/></td>
                     </tr>)
                 })}
                 <tr>
@@ -82,7 +79,6 @@ export const AccountTable: FC<AccountTable> = (props) => {
                     <td></td>
                     <td>${props.rows.map(p => p.estFundingRev).reduce((a, b) => +a + +b, 0).toFixed(2)}</td>
                     <td>{props.rows.map(p => p.estApr).reduce((a, b) => +a + +b, 0).toFixed(2)}%</td>
-                    <td></td>
                 </tr>
                 </tbody>
 
