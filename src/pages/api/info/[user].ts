@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import {Connection, PublicKey} from "@solana/web3.js";
 import {
   BUTLER_PROGRAM_KEY,
-  DRIFT_PROGRAM_KEY,
+  DRIFT_PROGRAM_KEY, MANGO_CACHE_KEY,
   MANGO_GROUP_CONFIG_KEY,
   MANGO_PROGRAM_KEY,
   RPC_URL
@@ -11,7 +11,7 @@ import {
 import {BN, Program} from "@project-serum/anchor";
 import {Butler} from "../../../models/butler";
 import {UserConfigType} from "../../../models/types";
-import {MangoAccount, MangoClient, MangoGroup} from "@blockworks-foundation/mango-client";
+import {MangoAccount, MangoCache, MangoClient, MangoGroup} from "@blockworks-foundation/mango-client";
 import {ClearingHouse, ClearingHouseUser} from "@drift-labs/sdk";
 
 export type UserInfoData = {
@@ -19,7 +19,9 @@ export type UserInfoData = {
   mangoAccount: PublicKey,
   accountInitialized: boolean,
   butlerAccountOwner: PublicKey,
-  userConfig: UserConfigType
+  userConfig: UserConfigType,
+  mangoAccountValue,
+  driftAccountValue
 }
 
 export default async function handler(
@@ -57,6 +59,7 @@ export default async function handler(
 
   if (mangoAccountInfo.value == null) {
     res.status(200).json({
+      driftAccountValue: undefined, mangoAccountValue: undefined,
       accountInitialized: false,
       butlerAccountOwner: undefined,
       mangoAccount: undefined,
@@ -104,6 +107,7 @@ export default async function handler(
   }
 
   const mangoPositions = await getMangoPositions(connection, mangoGroup, mangoAccount)
+  const mangoAccountValue = mangoAccount.getEquityUi(mangoGroup, await mangoGroup.loadCache(connection)) * 1000000
   const clearingHouse = ClearingHouse.from(
       connection,
       null,
@@ -114,7 +118,7 @@ export default async function handler(
   const driftUser = ClearingHouseUser.from(clearingHouse, accountOwner)
   await driftUser.subscribe()
   const driftPositions = driftUser.getUserPositionsAccount().positions
-  const driftCollateralValue = driftUser.getTotalCollateral().toNumber() / 1000000
+  const driftAccountValue = driftUser.getTotalCollateral().toNumber() / 1000000
 
   /// calculate for funding revenue, apy etc.
   await Promise.all(driftPositions.map(async p => {
@@ -175,7 +179,7 @@ export default async function handler(
     const mangoFundingRev = driftQuote * mangoFundingRate * driftFundingMultiplier * -1 / 100 / 24 / 365
     const estFundingRev = driftFundingRev + mangoFundingRev
     const fundingRateSum = driftFundingRate * driftFundingMultiplier + (mangoFundingRate * driftFundingMultiplier * -1)
-    const estApr = fundingRateSum * driftQuote / driftCollateralValue
+    const estApr = fundingRateSum * driftQuote / (driftAccountValue + mangoAccountValue)
     positionsUi.push({
         marketNamePerp,
         driftQuote,
@@ -195,6 +199,8 @@ export default async function handler(
     mangoAccount: mangoAccountPk,
     positionUi: positionsUi,
     butlerAccountOwner: accountOwner,
-    userConfig: userConfig
+    userConfig: userConfig,
+    mangoAccountValue,
+    driftAccountValue
   })
 }

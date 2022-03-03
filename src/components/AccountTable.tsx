@@ -59,7 +59,9 @@ export const AccountTable: FC<AccountTable> = (props) => {
                     </tr>
                 </thead>
                 <tbody>
-                {props.rows.map((row) => {
+                {props.rows.sort((a, b) => {
+                    return (a.estApr.valueOf() - b.estApr.valueOf()) * -1
+                }).map((row) => {
                     return (<tr>
                         <td>{row.marketNamePerp}</td>
                         <td>{row.driftBase}</td>

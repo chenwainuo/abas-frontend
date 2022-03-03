@@ -24,12 +24,14 @@ export const HomeView: FC = ({ }) => {
     return <div/>
   }
 
-  const { data, isLoading } = useUserInfo(wallet.publicKey.toString())
+  const { data, isLoading, isError } = useUserInfo(wallet.publicKey.toString())
 
-  if (isLoading) {
+  if (isLoading || isError) {
     return <div> Loading.... </div>
   }
 
+
+  console.log(data)
 
   return (
       <div className="hero mx-auto p-4 min-h-16 py-4">
@@ -39,6 +41,7 @@ export const HomeView: FC = ({ }) => {
           </h1>
           {/* CONTENT GOES HERE */}
           <div className="p-2 text-center">
+            <p>Total Account Value: ${(data.driftAccountValue + data.mangoAccountValue).toFixed(2)}</p>
             <CreateButlerAccount  show={!data.accountInitialized && !isLoading} publicKey={wallet.publicKey}/>
             <DepositUSDC  {... {mangoAccount: data.mangoAccount, butlerAccountOwner: data.butlerAccountOwner, show: data.accountInitialized}}/>
             <AccountTable {... {mangoAccount: data.mangoAccount, butlerAccountOwner: data.butlerAccountOwner, show: data.accountInitialized, rows:data.positionUi}}/>
