@@ -11,6 +11,9 @@ export default function useUserInfo(publicKey): UserInfo {
     // @ts-ignore
     const fetcher = (...args) => fetch(...args).then(res => res.json())
 
+    // this call is quite heavy on RPC node as you can imajin
+    // auto refresh every 30 seconds to get updated data
+    // min call interval is every 10 seconds
     const { data, error } = useSWR(`/api/info/${publicKey}`, fetcher, {refreshInterval: 30000, dedupingInterval: 10000})
 
     return {

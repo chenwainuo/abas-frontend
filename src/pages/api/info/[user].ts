@@ -193,6 +193,8 @@ export default async function handler(
     });
   }))
 
+  clearingHouse.unsubscribe()
+  driftUser.unsubscribe()
 
   res.status(200).json({
     accountInitialized: true,
