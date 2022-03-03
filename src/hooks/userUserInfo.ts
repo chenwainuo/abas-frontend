@@ -11,7 +11,7 @@ export default function useUserInfo(publicKey): UserInfo {
     // @ts-ignore
     const fetcher = (...args) => fetch(...args).then(res => res.json())
 
-    const { data, error } = useSWR(`/api/info/${publicKey}`, fetcher, {refreshInterval: 20000})
+    const { data, error } = useSWR(`/api/info/${publicKey}`, fetcher, {refreshInterval: 30000})
 
     return {
         data: data,
