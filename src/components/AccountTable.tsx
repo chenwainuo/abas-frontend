@@ -56,7 +56,6 @@ export const AccountTable: FC<AccountTable> = (props) => {
                     <th>Mango est. FR</th>
                     <th>est. 1H FR Revenue</th>
                         <th>est. APR</th>
-                        <th>Exit</th>
                     </tr>
                 </thead>
                 <tbody>
