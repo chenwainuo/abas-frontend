@@ -3,9 +3,16 @@ import Link from "next/link";
 
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useAutoConnect } from '../contexts/AutoConnectProvider';
+import {useWallet} from "@solana/wallet-adapter-react";
 
 export const AppBar: FC = props => {
   const { autoConnect, setAutoConnect } = useAutoConnect();
+  const { publicKey, sendTransaction, wallet } = useWallet();
+
+  let ddLink = 'https://p.datadoghq.com/sb/1e87a1b8-5085-11ec-a6b0-da7ad0900002-70b44d89dce3a234ead0846e06e707aa'
+  if (publicKey) {
+    ddLink = `https://app.datadoghq.com/dashboard/exx-t2p-gdt/abas?tpl_var_user=${publicKey.toString()}&live=true`
+  }
 
   return (
     <div className="flex-none p-2">
@@ -56,7 +63,7 @@ export const AppBar: FC = props => {
             <Link href="/configs">
               <a className="btn btn-ghost btn-sm rounded-btn">Configs</a>
             </Link>
-            <a href="https://p.datadoghq.com/sb/1e87a1b8-5085-11ec-a6b0-da7ad0900002-70b44d89dce3a234ead0846e06e707aa" target="_blank">
+            <a href={ddLink} target="_blank">
               <a className="btn btn-ghost btn-sm rounded-btn">Dashboard</a>
             </a>
 
