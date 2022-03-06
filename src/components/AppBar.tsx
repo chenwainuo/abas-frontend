@@ -11,7 +11,7 @@ export const AppBar: FC = props => {
 
   let ddLink = 'https://p.datadoghq.com/sb/1e87a1b8-5085-11ec-a6b0-da7ad0900002-70b44d89dce3a234ead0846e06e707aa'
   if (publicKey) {
-    ddLink = `https://app.datadoghq.com/dashboard/exx-t2p-gdt/abas?tpl_var_user=${publicKey.toString()}&live=true`
+    ddLink = `https://app.datadoghq.com/dashboard/exx-t2p-gdt/abas?tpl_var_user=${publicKey.toString().toLowerCase()}&live=true`
   }
 
   return (
