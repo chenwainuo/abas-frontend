@@ -6,7 +6,6 @@ import {CreateButlerAccount} from "../../components/CreateButlerAccount";
 import {useConnection, useWallet} from "@solana/wallet-adapter-react";
 import useUserSOLBalanceStore from "../../stores/useUserSOLBalanceStore";
 import {DepositUSDC} from "../../components/DepositUSDC";
-import {RebalanceCollateral} from "../../components/RebalanceCollateral";
 import {AccountTable} from "../../components/AccountTable";
 import {UserConfig} from "../../components/UserConfig";
 import {Connection} from "@solana/web3.js";
