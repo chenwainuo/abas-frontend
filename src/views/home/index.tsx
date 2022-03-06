@@ -43,7 +43,8 @@ export const HomeView: FC = ({ }) => {
           {/* CONTENT GOES HERE */}
           <div className="p-2 text-center">
 
-            <p>Total Account Value: ${(data.driftAccountValue + data.mangoAccountValue).toFixed(2)}</p>
+            { data.accountInitialized && !isLoading ? <p> Total Account Value: ${(data.driftAccountValue + data.mangoAccountValue).toFixed(2)}</p> : null }
+
             {<a target="_blank" href={`https://app.drift.trade/AVAX?authority=${data.butlerAccountOwner.toString()}`}> <button className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."> Drift Account </button></a>}
             {<a target="_blank" href={`https://trade.mango.markets/account?pubkey=${data.mangoAccount.toString()}`}><button className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."> Mango Account </button></a>}
 
