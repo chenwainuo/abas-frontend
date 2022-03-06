@@ -107,12 +107,11 @@ export const InitializeOrderHistory: FC<DepositUSDCProps> = (props) => {
         } catch (error: any) {
             notify({ type: 'error', message: `Transaction failed!`, description: error?.message, txid: signature });
             console.log('error', `Transaction failed! ${error?.message}`, signature);
-            return;
+        } finally {
+            await clearingHouse.unsubscribe()
         }
     }, [publicKey, notify, connection, sendTransaction]);
 
-
-    console.log(props)
 
     if (!props.show || !props.butlerAccountOwner || !props.mangoAccount) {
         return <div></div>

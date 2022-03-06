@@ -54,7 +54,7 @@ export default async function handler(
 
   const positionsUi = []
   let userConfig: UserConfigType = {
-    closeSpread: 0, mode: 0, openSpread: 0, tradeSize: 0, userCranker: undefined, userWallet: undefined
+    closeSpread: 0, mode: 0, openSpread: 0, tradeSize: 0, userCranker: undefined, userPubkey: undefined
   }
 
   if (mangoAccountInfo.value == null) {

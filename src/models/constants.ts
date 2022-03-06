@@ -12,6 +12,8 @@ export const MANGO_USDC_ROOT_KEY = new PublicKey("AMzanZxMirPCgGcBoH9kw4Jzi9LFMo
 export const MANGO_USDC_NODE_KEY = new PublicKey("BGcwkj1WudQwUUjFk78hAjwd1uAm8trh1N4CJSa51euh")
 export const MANGO_CACHE_KEY = new PublicKey("EBDRoayCDDUvDgCimta45ajQeXbexv7aKqJubruqpyvu")
 export const MANGO_USDC_VAULT = new PublicKey("8Vw25ZackDzaJzzBBqcgcpDsCsDfRSkMGgwFQ3gbReWF")
+export const MANGO_SIGNER_KEY = new PublicKey("9BVcYqEQxyccuwznvxXqDkSJFavvTyheiTYk231T1A8S")
+
 export type MangoDriftConfig = {
     driftIndex: number,
     mangoIndex: number,

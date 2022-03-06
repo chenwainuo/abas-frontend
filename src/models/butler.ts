@@ -324,7 +324,7 @@ export type Butler = {
             "accounts": [
                 {
                     "name": "state",
-                    "isMut": false,
+                    "isMut": true,
                     "isSigner": false
                 },
                 {
@@ -624,9 +624,19 @@ export type Butler = {
                     "isSigner": false
                 },
                 {
+                    "name": "butlerUserPubkey",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "userConfig",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
                     "name": "signer",
                     "isMut": true,
-                    "isSigner": false
+                    "isSigner": true
                 },
                 {
                     "name": "tokenProgram",
@@ -649,6 +659,10 @@ export type Butler = {
                 },
                 {
                     "name": "butlerMangoCollateralBump",
+                    "type": "u8"
+                },
+                {
+                    "name": "butlerUserConfigBump",
                     "type": "u8"
                 },
                 {
@@ -740,9 +754,14 @@ export type Butler = {
                     "isSigner": false
                 },
                 {
+                    "name": "userConfig",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
                     "name": "signer",
                     "isMut": true,
-                    "isSigner": false
+                    "isSigner": true
                 },
                 {
                     "name": "tokenProgram",
@@ -769,6 +788,10 @@ export type Butler = {
                 },
                 {
                     "name": "butlerDriftCollateralBump",
+                    "type": "u8"
+                },
+                {
+                    "name": "butlerUserConfigBump",
                     "type": "u8"
                 },
                 {
@@ -1260,7 +1283,7 @@ export type Butler = {
                 "kind": "struct",
                 "fields": [
                     {
-                        "name": "userWallet",
+                        "name": "userPubkey",
                         "type": "publicKey"
                     },
                     {
@@ -1317,7 +1340,7 @@ export type Butler = {
                         "type": "publicKey"
                     },
                     {
-                        "name": "padding1",
+                        "name": "globalDepositAmount",
                         "type": "u128"
                     },
                     {
@@ -1430,7 +1453,7 @@ export type Butler = {
             "name": "CreateUserAccountEvent",
             "fields": [
                 {
-                    "name": "userWallet",
+                    "name": "userPubkey",
                     "type": "publicKey",
                     "index": false
                 },
@@ -1447,6 +1470,51 @@ export type Butler = {
                 {
                     "name": "driftAccount",
                     "type": "publicKey",
+                    "index": false
+                }
+            ]
+        },
+        {
+            "name": "PlaceArbOrderEvent",
+            "fields": [
+                {
+                    "name": "userWallet",
+                    "type": "publicKey",
+                    "index": false
+                },
+                {
+                    "name": "isDriftLong",
+                    "type": "bool",
+                    "index": false
+                },
+                {
+                    "name": "isOpening",
+                    "type": "bool",
+                    "index": false
+                },
+                {
+                    "name": "worstMangoPrice",
+                    "type": "u64",
+                    "index": false
+                },
+                {
+                    "name": "driftLimitPrice",
+                    "type": "u128",
+                    "index": false
+                },
+                {
+                    "name": "tradeSize",
+                    "type": "u128",
+                    "index": false
+                },
+                {
+                    "name": "userConfigMode",
+                    "type": "u8",
+                    "index": false
+                },
+                {
+                    "name": "spread",
+                    "type": "i8",
                     "index": false
                 }
             ]
@@ -1467,6 +1535,16 @@ export type Butler = {
             "code": 6002,
             "name": "EmptyMangoOrderBook",
             "msg": "bro wtf you emptied the mango order book"
+        },
+        {
+            "code": 6003,
+            "name": "DriftOrderNotFilledCompletely",
+            "msg": "Drift order did not filled completely"
+        },
+        {
+            "code": 6004,
+            "name": "MaxDepositReached",
+            "msg": "Max deposit reached"
         }
     ]
 };
@@ -1797,7 +1875,7 @@ export const IDL: Butler = {
             "accounts": [
                 {
                     "name": "state",
-                    "isMut": false,
+                    "isMut": true,
                     "isSigner": false
                 },
                 {
@@ -2097,9 +2175,19 @@ export const IDL: Butler = {
                     "isSigner": false
                 },
                 {
+                    "name": "butlerUserPubkey",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "userConfig",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
                     "name": "signer",
                     "isMut": true,
-                    "isSigner": false
+                    "isSigner": true
                 },
                 {
                     "name": "tokenProgram",
@@ -2122,6 +2210,10 @@ export const IDL: Butler = {
                 },
                 {
                     "name": "butlerMangoCollateralBump",
+                    "type": "u8"
+                },
+                {
+                    "name": "butlerUserConfigBump",
                     "type": "u8"
                 },
                 {
@@ -2213,9 +2305,14 @@ export const IDL: Butler = {
                     "isSigner": false
                 },
                 {
+                    "name": "userConfig",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
                     "name": "signer",
                     "isMut": true,
-                    "isSigner": false
+                    "isSigner": true
                 },
                 {
                     "name": "tokenProgram",
@@ -2242,6 +2339,10 @@ export const IDL: Butler = {
                 },
                 {
                     "name": "butlerDriftCollateralBump",
+                    "type": "u8"
+                },
+                {
+                    "name": "butlerUserConfigBump",
                     "type": "u8"
                 },
                 {
@@ -2733,7 +2834,7 @@ export const IDL: Butler = {
                 "kind": "struct",
                 "fields": [
                     {
-                        "name": "userWallet",
+                        "name": "userPubkey",
                         "type": "publicKey"
                     },
                     {
@@ -2790,7 +2891,7 @@ export const IDL: Butler = {
                         "type": "publicKey"
                     },
                     {
-                        "name": "padding1",
+                        "name": "globalDepositAmount",
                         "type": "u128"
                     },
                     {
@@ -2903,7 +3004,7 @@ export const IDL: Butler = {
             "name": "CreateUserAccountEvent",
             "fields": [
                 {
-                    "name": "userWallet",
+                    "name": "userPubkey",
                     "type": "publicKey",
                     "index": false
                 },
@@ -2920,6 +3021,51 @@ export const IDL: Butler = {
                 {
                     "name": "driftAccount",
                     "type": "publicKey",
+                    "index": false
+                }
+            ]
+        },
+        {
+            "name": "PlaceArbOrderEvent",
+            "fields": [
+                {
+                    "name": "userWallet",
+                    "type": "publicKey",
+                    "index": false
+                },
+                {
+                    "name": "isDriftLong",
+                    "type": "bool",
+                    "index": false
+                },
+                {
+                    "name": "isOpening",
+                    "type": "bool",
+                    "index": false
+                },
+                {
+                    "name": "worstMangoPrice",
+                    "type": "u64",
+                    "index": false
+                },
+                {
+                    "name": "driftLimitPrice",
+                    "type": "u128",
+                    "index": false
+                },
+                {
+                    "name": "tradeSize",
+                    "type": "u128",
+                    "index": false
+                },
+                {
+                    "name": "userConfigMode",
+                    "type": "u8",
+                    "index": false
+                },
+                {
+                    "name": "spread",
+                    "type": "i8",
                     "index": false
                 }
             ]
@@ -2940,6 +3086,16 @@ export const IDL: Butler = {
             "code": 6002,
             "name": "EmptyMangoOrderBook",
             "msg": "bro wtf you emptied the mango order book"
+        },
+        {
+            "code": 6003,
+            "name": "DriftOrderNotFilledCompletely",
+            "msg": "Drift order did not filled completely"
+        },
+        {
+            "code": 6004,
+            "name": "MaxDepositReached",
+            "msg": "Max deposit reached"
         }
     ]
 };

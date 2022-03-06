@@ -15,7 +15,7 @@ export type PositionUiRow = {
 }
 
 export type UserConfigType = {
-    userWallet: PublicKey,
+    userPubkey: PublicKey,
     userCranker: PublicKey,
     tradeSize: number,
     openSpread: number,

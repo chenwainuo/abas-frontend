@@ -14,6 +14,7 @@ import {RPC_URL} from "../../models/constants";
 import {UserInfoData} from "../../pages/api/info/[user]";
 import useUserInfo from "../../hooks/userUserInfo";
 import {publicKey} from "@solana/web3.js/src/layout";
+import {WithdrawUSDC} from "../../components/WithdrawUSDC";
 
 export const HomeView: FC = ({ }) => {
   const wallet = useWallet();
@@ -41,9 +42,14 @@ export const HomeView: FC = ({ }) => {
           </h1>
           {/* CONTENT GOES HERE */}
           <div className="p-2 text-center">
+
             <p>Total Account Value: ${(data.driftAccountValue + data.mangoAccountValue).toFixed(2)}</p>
+            {<a target="_blank" href={`https://app.drift.trade/AVAX?authority=${data.butlerAccountOwner.toString()}`}> <button className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."> Drift Account </button></a>}
+            {<a target="_blank" href={`https://trade.mango.markets/account?pubkey=${data.mangoAccount.toString()}`}><button className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."> Mango Account </button></a>}
+
             <CreateButlerAccount  show={!data.accountInitialized && !isLoading} publicKey={wallet.publicKey}/>
             <DepositUSDC  {... {mangoAccount: data.mangoAccount, butlerAccountOwner: data.butlerAccountOwner, show: data.accountInitialized}}/>
+            <WithdrawUSDC  {... {mangoAccount: data.mangoAccount, butlerAccountOwner: data.butlerAccountOwner, show: data.accountInitialized}}/>
             <AccountTable {... {mangoAccount: data.mangoAccount, butlerAccountOwner: data.butlerAccountOwner, show: data.accountInitialized, rows:data.positionUi}}/>
           </div>
         </div>
