@@ -155,7 +155,7 @@ export const DepositUSDC: FC<DepositUSDCProps> = (props) => {
                 className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."
                 onClick={onClick} disabled={!publicKey}
             >
-                <span> Deposit 100 </span>
+                <span> Deposit 100 USDC </span>
             </button>
         </div>
     );
