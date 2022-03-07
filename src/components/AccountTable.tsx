@@ -39,7 +39,7 @@ export const AccountTable: FC<AccountTable> = (props) => {
 
     if (props.rows.length === 0) {
         return ( <div>
-            <a> 👀 Abas keeper is workign hard to get a good price entry for you, patience is a virtue! </a>
+            <a> 👀  Abas keeper is working hard to get a good price entry for you, patience is a virtue! <br/> </a>
             <a> Meanwhile drop by our <a href={"http://discord.gg/4rNmEWNZU5"}>Discord</a> and say hi! </a>
         </div>)
     }
