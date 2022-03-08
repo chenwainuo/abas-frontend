@@ -7,20 +7,21 @@ import {
     DRIFT_PROGRAM_KEY,
     DRIFT_STATE_KEY,
     MANGO_CACHE_KEY,
-    MANGO_DRFIT_CONFIG,
     MANGO_GROUP_CONFIG_KEY,
     MANGO_PROGRAM_KEY,
     MANGO_SIGNER_KEY,
     MANGO_USDC_NODE_KEY,
     MANGO_USDC_ROOT_KEY,
     MANGO_USDC_VAULT,
-    MangoDriftConfig,
     USDC_MINT_KEY,
 } from "../models/constants";
 import {Butler} from "../models/butler";
-import {BN, Program} from "@project-serum/anchor";
-import {ASSOCIATED_TOKEN_PROGRAM_ID, Token, TOKEN_PROGRAM_ID} from "@solana/spl-token";
-import {ClearingHouse, DriftEnv, initialize, PositionDirection,} from '@drift-labs/sdk';
+import {Program} from "@project-serum/anchor";
+import {
+    getAssociatedTokenAddress,
+    TOKEN_PROGRAM_ID
+} from "@solana/spl-token";
+import {ClearingHouse, } from '@drift-labs/sdk';
 
 export type WithdrawUSDCProps = {
     show: boolean,
@@ -107,7 +108,7 @@ export const WithdrawUSDC: FC<WithdrawUSDCProps> = (props) => {
 
         const quantityNative = new anchor.BN(100 /2 * 1000000)
 
-        const userDriftCollateralAccount = await Token.getAssociatedTokenAddress(ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, USDC_MINT_KEY, publicKey)
+        const userDriftCollateralAccount = await getAssociatedTokenAddress(USDC_MINT_KEY, publicKey)
 
         let signature: TransactionSignature = '';
         try {

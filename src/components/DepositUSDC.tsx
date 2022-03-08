@@ -3,8 +3,7 @@ import { FC, useCallback } from 'react';
 import { ClearingHouse } from '@drift-labs/sdk';
 import { Program } from '@project-serum/anchor';
 import {
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  Token,
+  getAssociatedTokenAddress,
   TOKEN_PROGRAM_ID,
 } from '@solana/spl-token';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
@@ -135,9 +134,7 @@ export const DepositUSDC: FC<DepositUSDCProps> = (props) => {
 
     const quantityNative = new anchor.BN((100 / 2) * 1000000);
 
-    const userDriftCollateralAccount = await Token.getAssociatedTokenAddress(
-      ASSOCIATED_TOKEN_PROGRAM_ID,
-      TOKEN_PROGRAM_ID,
+    const userDriftCollateralAccount = await getAssociatedTokenAddress(
       USDC_MINT_KEY,
       publicKey
     );
