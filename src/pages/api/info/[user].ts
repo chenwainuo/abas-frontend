@@ -6,13 +6,14 @@ import {
   DRIFT_PROGRAM_KEY, MANGO_CACHE_KEY,
   MANGO_GROUP_CONFIG_KEY,
   MANGO_PROGRAM_KEY,
-  RPC_URL
+  RPC_URL, USDC_MINT_KEY
 } from "../../../models/constants";
 import {BN, Program} from "@project-serum/anchor";
 import {Butler} from "../../../models/butler";
 import {UserConfigType} from "../../../models/types";
 import {MangoAccount, MangoCache, MangoClient, MangoGroup} from "@blockworks-foundation/mango-client";
 import {ClearingHouse, ClearingHouseUser} from "@drift-labs/sdk";
+import {getAssociatedTokenAddress} from "@solana/spl-token";
 
 export type UserInfoData = {
   positionUi: any[],
@@ -20,8 +21,9 @@ export type UserInfoData = {
   accountInitialized: boolean,
   butlerAccountOwner: PublicKey,
   userConfig: UserConfigType,
-  mangoAccountValue,
-  driftAccountValue
+  mangoAccountValue: number,
+  driftAccountValue: number,
+  userUsdcBalance: number
 }
 
 export default async function handler(
@@ -30,6 +32,7 @@ export default async function handler(
 ) {
   const { user } = req.query
   const userPkey = new PublicKey(user.toString())
+
   const connection = new Connection(RPC_URL)
 
 
@@ -193,6 +196,10 @@ export default async function handler(
     });
   }))
 
+  const userUsdcAccount = await getAssociatedTokenAddress(USDC_MINT_KEY, userPkey)
+  const userUsdcBalance = (await connection.getTokenAccountBalance(userUsdcAccount)).value.uiAmount;
+
+  console.log("user usdc balance", userUsdcBalance)
   clearingHouse.unsubscribe()
   driftUser.unsubscribe()
 
@@ -203,6 +210,7 @@ export default async function handler(
     butlerAccountOwner: accountOwner,
     userConfig: userConfig,
     mangoAccountValue,
-    driftAccountValue
+    driftAccountValue,
+    userUsdcBalance
   })
 }
