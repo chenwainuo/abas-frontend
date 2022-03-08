@@ -1,28 +1,17 @@
+import { FC } from 'react';
 
-import {FC, useEffect, useState} from "react";
-import { SignMessage } from '../../components/SignMessage';
-import { SendTransaction } from '../../components/SendTransaction';
-import {CreateButlerAccount} from "../../components/CreateButlerAccount";
-import {useConnection, useWallet} from "@solana/wallet-adapter-react";
-import useUserSOLBalanceStore from "../../stores/useUserSOLBalanceStore";
-import {DepositUSDC} from "../../components/DepositUSDC";
-import {AccountTable} from "../../components/AccountTable";
-import {UserConfig} from "../../components/UserConfig";
-import {Connection} from "@solana/web3.js";
-import {RPC_URL} from "../../models/constants";
-import {UserInfoData} from "../../pages/api/info/[user]";
-import useUserInfo from "../../hooks/userUserInfo";
+import { useUserInfoContext } from '@/contexts/UserInfoProvider';
 
-export const ConfigsView: FC = ({ }) => {
-  const wallet = useWallet();
-  if (!wallet.publicKey) {
-    return <div/>
+import { UserConfig } from '../../components/UserConfig';
+
+export const ConfigsView: FC = () => {
+  const { data, isLoading } = useUserInfoContext();
+
+  if (!data) {
+    return <div />;
   }
-
-  const { data, isLoading } = useUserInfo(wallet.publicKey.toString())
-
   if (isLoading) {
-    return <div> Loading.... </div>
+    return <div> Loading.... </div>;
   }
 
   return (
@@ -33,7 +22,15 @@ export const ConfigsView: FC = ({ }) => {
         </h1>
         {/* CONTENT GOES HERE */}
         <div className="p-2 text-center">
-          <UserConfig  {... {isLoading, mangoAccount: data.mangoAccount, butlerAccountOwner: data.butlerAccountOwner,userConfig: data.userConfig, show: data.accountInitialized}}/>
+          <UserConfig
+            {...{
+              isLoading,
+              mangoAccount: data.mangoAccount,
+              butlerAccountOwner: data.butlerAccountOwner,
+              userConfig: data.userConfig,
+              show: data.accountInitialized,
+            }}
+          />
         </div>
       </div>
     </div>
