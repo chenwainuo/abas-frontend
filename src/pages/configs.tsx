@@ -7,7 +7,7 @@ const Configs: NextPage = (props) => {
   return (
     <div>
       <Head>
-        <title>Solana Scaffold</title>
+        <title>Abas Finance</title>
         <meta name="description" content="Token Basics" />
       </Head>
       <ConfigsView />
