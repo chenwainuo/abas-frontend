@@ -71,6 +71,9 @@ export const HomeView: FC = () => {
                   mangoAccount: data.mangoAccount,
                   butlerAccountOwner: data.butlerAccountOwner,
                   show: data.accountInitialized,
+                  driftFreeCollateral:data.driftFreeCollateral,
+                  mangoAccountValue: data.mangoAccountValue,
+                  positionUi: data.positionUi
                 }}
               />
               <AccountTable
