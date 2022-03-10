@@ -115,5 +115,6 @@ export const WHITELIST_PUBKEY = [
     "CGE34jY414WZyBMMb76a5ziWrAHnXwaxLwUSBnuvYdzg",
     "5sBpMQgTi7phxqRnErfbwx29vUsbUZoy1MLgY7aXuqeo",
     "5AaFBQmUpEtBkCBNpa1jv28q44EnB2nP5CRejHQCoBSc",
-    "Gyfp12eAkPSw8MUcMcNH4EpHoZYoGs85Jg6tMsewxqYE"
+    "Gyfp12eAkPSw8MUcMcNH4EpHoZYoGs85Jg6tMsewxqYE",
+    "5enYxq4sKxeS7AjekFbpnAJo3af51JfJjp7uN69fkdFK"
 ]
