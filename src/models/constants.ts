@@ -81,3 +81,39 @@ export const MANGO_DRFIT_CONFIG = {
     } as MangoDriftConfig
 
 }
+
+
+export const WHITELIST_PUBKEY = [
+    "DeezaMBrkEXxPxQvFdN8N3tjUTZdbDkbCcPjLNvB5FGw",
+    "7WFtrHFYwYwTGDnEMnWb2YYSCaQk2jc6JXLJvdbmqMMr",
+    "set1kBe5zQXMPcYgFBQwGiyW97eu5ddZ38sVUXB7Nds",
+    "2hCS9ArjW6NBhTDo9t8MU4U4wmSsa4v2s87NjvnvX9gQ",
+    "CYJ41oyY9eKJmhwxDxK583KEyGHxXxYh1CnhudMn33RD",
+    "Cx5FdZD8472QfpxCHEeK8Ca8LaHGfsuoruV5PukeRjYb",
+    "GDvfwuytQuzKZFqdwnJoRnssAnqbbQ9Hqr2tZXb5bXM6",
+    "4vJWNsRmcdZ4weG6xYCJupxdPaUUUaqLgumMhRc2jBv8",
+    "GU2CEG4UxxaqNuauRZFMBWjxCHYtGzXMo4UpGoKUtigb",
+    "7RKkea2jZQDRiDP6E26SYFXmyTvGzgXJWEQNdJcgRp1D",
+    "NyFifTVRQXZ5LKiAAdqiN9jMjWM9BkRiAx3iWeZHmSs",
+    "8vyLuohvz5H9de9LxAort4BvFPDFsrEyTkM7Kmq1a4Fc",
+    "CzGtr4axSfWrFJcJ4Vk3KPhfqiaA2iuYbUmm1r365odk",
+    "64aioWkKqxraFCvy4rLcgYA2LfoVgzGPrEdhKpcW1ppM",
+    "6dRjjYDZVwt26ziqW5hvLmkXNrvACJaUv2cWtrA6ky7x",
+    "GQmAKyJBTjDhfECzSTj2n2URTPcEeSMErUxAEg2DpEEK",
+    "2dsEkAXA6M1MTCGyrFVrZdVkE8ooX5NXhFXeAk3C3gHt",
+    "9EMbvF14vFb1YVPDrzS9DV8mL6xxkL6oxBvGRk64hekQ",
+    "Emz9HwYpt8RdRmf2PKRWhNAiYqv4j2ANx4eKF3Bu24rs",
+    "86LbAEnwSx41YQpkLX48CWQNqVRnFwRNXtNJWeGDX5Z8",
+    "HrUr1pRxqXJ72RaSSdv4GXbRWLW32EWgjEtt6uiaQp9v",
+    "6NTbCkLyLZ8bU7wmCMd3AFU3FLMMqFSBRgg2qHPnKj6X",
+    "BWMBJwmcKv7gDGx9Be1oZqmKhb2JhPxcxvBxErZGCaV1",
+    "B7sPQhKSvAzArvU41QAcc8a1m6TWbGBryEuLKfWgoXe9",
+    "CWjWW9stkWBVyUT2C1P2VoW5ykM6WXvfTscausPxQLWU",
+    "FUozyX3anCrP2ECFsdosRF9rvVr6LqYLjNMyzsdK3LZ",
+    "Eze21BxGyxEDWTnYipXu2HveJYwSDa9uGUvpDVsPUNTC",
+    "8MysJK4f7LFnrZKPgbDrMjf2Jrwjh8vrozav24qtKYoR",
+    "CGE34jY414WZyBMMb76a5ziWrAHnXwaxLwUSBnuvYdzg",
+    "5sBpMQgTi7phxqRnErfbwx29vUsbUZoy1MLgY7aXuqeo",
+    "5AaFBQmUpEtBkCBNpa1jv28q44EnB2nP5CRejHQCoBSc",
+    "Gyfp12eAkPSw8MUcMcNH4EpHoZYoGs85Jg6tMsewxqYE"
+]

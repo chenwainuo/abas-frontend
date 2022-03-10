@@ -27,12 +27,30 @@ export type WithdrawUSDCProps = {
     show: boolean,
     mangoAccount: PublicKey,
     butlerAccountOwner: PublicKey,
+    driftFreeCollateral: number,
+    mangoAccountValue: number,
+    positionUi: []
+
 }
 
 export const WithdrawUSDC: FC<WithdrawUSDCProps> = (props) => {
     const { connection } = useConnection();
     const { publicKey, sendTransaction, wallet } = useWallet();
 
+    console.log("driftFreeCollateral", props.driftFreeCollateral)
+    console.log("mangoAccountValue", props.mangoAccountValue)
+
+    let driftWithdrawValue = 50;
+    let mangoWithdrawValue = 50;
+
+    // if user exited all position and has some balance in his account
+    // we set the withdrawable value to full amount of his account so he can take all money out
+    // will eventually need to think about partial withdraw vs full withdraw
+    // maybe we will only allow withdraw when user exited all.
+    if (props.positionUi.length === 0 && props.driftFreeCollateral > 0) {
+        driftWithdrawValue = props.driftFreeCollateral
+        mangoWithdrawValue = props.mangoAccountValue
+    }
 
     const onClick = useCallback(async () => {
         if (!publicKey) {
@@ -106,14 +124,15 @@ export const WithdrawUSDC: FC<WithdrawUSDCProps> = (props) => {
 
         const program = await anchor.Program.at(BUTLER_PROGRAM_KEY, provider) as Program<Butler>
 
-        const quantityNative = new anchor.BN(100 /2 * 1000000)
+        const mangoQuantityNative = new anchor.BN(mangoWithdrawValue * 1000000)
+        const driftQuantityNative = new anchor.BN(driftWithdrawValue * 1000000)
 
         const userDriftCollateralAccount = await getAssociatedTokenAddress(USDC_MINT_KEY, publicKey)
 
         let signature: TransactionSignature = '';
         try {
 
-            const withdrawDriftCollateralIx = await program.instruction.withdrawDriftCollateral(stateBump, accountOwnerBump, butlerDriftCollateralBump, butlerMangoCollateralBump, butlerUserConfigBump, quantityNative, false, {
+            const withdrawDriftCollateralIx = await program.instruction.withdrawDriftCollateral(stateBump, accountOwnerBump, butlerDriftCollateralBump, butlerMangoCollateralBump, butlerUserConfigBump, driftQuantityNative, false, {
                 accounts: {
                     state: state,
                     userDriftCollateralAccount: userDriftCollateralAccount,
@@ -138,7 +157,7 @@ export const WithdrawUSDC: FC<WithdrawUSDCProps> = (props) => {
                     tokenProgram: TOKEN_PROGRAM_ID
                 },
             })
-            const withdrawIx = program.instruction.withdrawMangoCollateral(stateBump, mangoAccountBump, accountOwnerBump, butlerMangoCollateralBump, butlerDriftCollateralBump, butlerUserConfigBump, quantityNative, false, {
+            const withdrawIx = program.instruction.withdrawMangoCollateral(stateBump, mangoAccountBump, accountOwnerBump, butlerMangoCollateralBump, butlerDriftCollateralBump, butlerUserConfigBump, mangoQuantityNative, false, {
                 accounts: {
                     state: state,
                     userMangoCollateralAccount: userDriftCollateralAccount,
@@ -184,7 +203,7 @@ export const WithdrawUSDC: FC<WithdrawUSDCProps> = (props) => {
         className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."
     onClick={onClick} disabled={!publicKey}
 >
-    <span> Withdraw 100 USDC</span>
+    <span> Withdraw {(mangoWithdrawValue + driftWithdrawValue).toFixed(0)} USDC</span>
     </button>
     </div>
 );

@@ -30,6 +30,7 @@ export type UserInfoData = {
   mangoAccountValue: number;
   driftAccountValue: number;
   userUsdcBalance: number;
+  driftFreeCollateral: number
 };
 
 const getAccountBalance = async (
@@ -170,6 +171,7 @@ export default async function handler(
   await driftUser.subscribe();
   const driftPositions = driftUser.getUserPositionsAccount().positions;
   const driftAccountValue = driftUser.getTotalCollateral().toNumber() / 1000000;
+  const driftFreeCollateral = driftUser.getFreeCollateral().toNumber() / 1000000;
 
   /// calculate for funding revenue, apy etc.
   await Promise.all(
@@ -278,5 +280,6 @@ export default async function handler(
     mangoAccountValue,
     driftAccountValue,
     userUsdcBalance,
+    driftFreeCollateral
   });
 }

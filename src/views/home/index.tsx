@@ -8,6 +8,7 @@ import { AccountTable } from '../../components/AccountTable';
 import { CreateButlerAccount } from '../../components/CreateButlerAccount';
 import { DepositUSDC } from '../../components/DepositUSDC';
 import { WithdrawUSDC } from '../../components/WithdrawUSDC';
+import {WHITELIST_PUBKEY} from "@/models/constants";
 
 export const HomeView: FC = () => {
   const wallet = useWallet();
@@ -21,6 +22,12 @@ export const HomeView: FC = () => {
 
   if (isLoading || isError) {
     return <div> Loading.... </div>;
+  }
+
+  if (wallet.publicKey && !WHITELIST_PUBKEY.includes(wallet.publicKey.toString())) {
+    return <div>
+      <a>Abas app is being tested within small group of early users right now to make sure everything is working as intended & safe to use. <br></br> We will open up for wider set of users soon.<br></br> Meanwhile swing by our Discord and stay tune =)</a>
+    </div>
   }
 
   console.log(data);
@@ -71,6 +78,9 @@ export const HomeView: FC = () => {
                   mangoAccount: data.mangoAccount,
                   butlerAccountOwner: data.butlerAccountOwner,
                   show: data.accountInitialized,
+                  driftFreeCollateral:data.driftFreeCollateral,
+                  mangoAccountValue: data.mangoAccountValue,
+                  positionUi: data.positionUi
                 }}
               />
               <AccountTable
