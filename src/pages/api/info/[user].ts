@@ -304,6 +304,8 @@ export default async function handler(
     await getMangoFundingRatesDayProfit(mangoAccount.publicKey.toString())
   );
 
+  console.log('mangoDailyFundingRateProfit', mangoDailyFundingRateProfit);
+
   const clearingHouse = ClearingHouse.from(connection, null, DRIFT_PROGRAM_KEY);
   await clearingHouse.subscribe();
   const driftUser = ClearingHouseUser.from(clearingHouse, accountOwner);
@@ -344,15 +346,21 @@ export default async function handler(
         return;
       }
 
+      console.log('getting', marketNamePerp);
       const mangoFundingRate =
         (await getMangoFundingRates(marketNamePerp)) * 24 * 365;
 
       const driftBase =
         p.baseAssetAmount.div(new BN('10000000000')).toNumber() / 1000;
-      const isDriftLong = p.baseAssetAmount.toNumber() > 0;
+      const isDriftLong = driftBase > 0;
       const market = clearingHouse.getMarket(p.marketIndex);
-      const marketTwap = market.amm.lastMarkPriceTwap.toNumber();
-      const oracleTwap = market.amm.lastOraclePriceTwap.toNumber();
+      const marketTwap = market.amm.lastMarkPriceTwap
+        .div(new BN('10000'))
+        .toNumber();
+
+      const oracleTwap = market.amm.lastOraclePriceTwap
+        .div(new BN('10000'))
+        .toNumber();
       const driftFundingRate =
         ((marketTwap - oracleTwap) / oracleTwap) * 100 * (1 / 24) * 24 * 365;
 
