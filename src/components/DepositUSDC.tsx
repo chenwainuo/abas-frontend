@@ -2,10 +2,7 @@ import { FC, useCallback } from 'react';
 
 import { ClearingHouse } from '@drift-labs/sdk';
 import { Program } from '@project-serum/anchor';
-import {
-  getAssociatedTokenAddress,
-  TOKEN_PROGRAM_ID,
-} from '@solana/spl-token';
+import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey, Transaction, TransactionSignature } from '@solana/web3.js';
 
@@ -134,7 +131,7 @@ export const DepositUSDC: FC<DepositUSDCProps> = (props) => {
 
     const quantityNative = new anchor.BN((100 / 2) * 1000000);
 
-    const userDriftCollateralAccount = await getAssociatedTokenAddress(
+    const userUsdcAtaAccount = await getAssociatedTokenAddress(
       USDC_MINT_KEY,
       publicKey
     );
@@ -151,8 +148,7 @@ export const DepositUSDC: FC<DepositUSDCProps> = (props) => {
         {
           accounts: {
             state,
-            userDriftCollateralAccount,
-            userMangoCollateralAccount: userDriftCollateralAccount,
+            userUsdcAtaAccount,
             butlerDriftCollateralVault,
             butlerMangoCollateralVault,
             butlerAccountOwner: accountOwner,
@@ -182,7 +178,7 @@ export const DepositUSDC: FC<DepositUSDCProps> = (props) => {
           {
             accounts: {
               state,
-              userMangoCollateralAccount: userDriftCollateralAccount,
+              userUsdcAtaAccount,
               butlerDriftCollateralVault,
               butlerMangoCollateralVault,
               butlerAccountOwner: accountOwner,
