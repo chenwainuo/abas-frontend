@@ -242,8 +242,7 @@ export const WithdrawUSDC: FC<WithdrawUSDCProps> = (props) => {
 
       signature = await sendTransaction(
         new Transaction().add(withdrawDriftCollateralIx).add(withdrawIx),
-        connection,
-        { skipPreflight: true }
+        connection
       );
 
       console.log('signature', signature);
