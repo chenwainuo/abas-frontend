@@ -21,6 +21,10 @@ import {
 } from '../../../models/constants';
 import { UserConfigType } from '../../../models/types';
 
+const NodeCache = require('node-cache');
+
+const cache = new NodeCache({ stdTTL: 60, checkperiod: 30 });
+
 export type UserInfoData = {
   positionUi: any[];
   mangoAccount: PublicKey;
@@ -30,7 +34,9 @@ export type UserInfoData = {
   mangoAccountValue: number;
   driftAccountValue: number;
   userUsdcBalance: number;
-  driftFreeCollateral: number
+  driftFreeCollateral: number;
+  mangoDailyFundingRateProfit: number;
+  driftDailyFundingRateProfit: number;
 };
 
 const getAccountBalance = async (
@@ -50,6 +56,168 @@ const getAccountBalance = async (
   }
 
   return userUsdcBalance || 0;
+};
+
+const getDriftFundingRateDayProfit = async (userDriftAccount: string) => {
+  const cacheKey = `drift_24h_funding_rate_${userDriftAccount}`;
+  const value = cache.get(cacheKey);
+  if (value) {
+    console.log('cache hit', cacheKey);
+    return value;
+  }
+  console.log('cache miss', cacheKey);
+
+  const stats = await (
+    await fetch(
+      `https://mainnet-beta.api.drift.trade/fundingRatePayments/userAccount/${userDriftAccount}?pageIndex=0&pageSize=100`
+    )
+  ).json();
+  if (stats.success) {
+    const minTime = new Date().getTime() / 1000 - 86400;
+    let fundingReceived = new BN(0);
+    for (const p of stats.data) {
+      if (p.blockchainTs < minTime) {
+        break;
+      }
+      fundingReceived = fundingReceived.add(new BN(p.amount));
+    }
+
+    const fundingRateFloat =
+      fundingReceived.div(new BN('100000000000')).toNumber() / 100;
+    cache.set(
+      `drift_24h_funding_rate_${userDriftAccount}`,
+      fundingRateFloat.toString(),
+      300
+    );
+    return fundingRateFloat.toString();
+  }
+  return '0';
+};
+
+const getMangoFundingRatesDayProfit = async (userMangoAccount: string) => {
+  const cacheKey = `mango_24h_funding_rate_${userMangoAccount}`;
+  const value = cache.get(cacheKey);
+  if (value) {
+    console.log('cache hit', cacheKey);
+    return value;
+  }
+  console.log('cache miss', cacheKey);
+
+  const url = `https://mango-transaction-log.herokuapp.com/v3/stats/hourly-funding?mango-account=${userMangoAccount}`;
+  const stats = await (await fetch(url)).json();
+  let r = 0;
+  const minDate = new Date().getTime() - 24 * 60 * 60 * 1000;
+
+  for (const [_, fundings] of Object.entries(stats)) {
+    for (const [dateStr, fundingObj] of Object.entries(fundings)) {
+      const date = new Date(dateStr).getTime();
+      if (date < minDate) {
+        break;
+      }
+      r += fundingObj.total_funding;
+    }
+  }
+  cache.set(cacheKey, r.toString(), 300);
+  return r.toString();
+};
+
+const getMangoFundingRates = async (marketName: string) => {
+  const cacheKey = `mango_funding_rates_${marketName}`;
+  const value = cache.get(cacheKey);
+  if (value) {
+    console.log('cache hit', cacheKey);
+    return value;
+  }
+  console.log('cache miss', cacheKey);
+
+  const stats = await (
+    await fetch(
+      `https://mango-stats-v3.herokuapp.com/perp/funding_rate?mangoGroup=mainnet.1&market=${marketName}`
+    )
+  ).json();
+
+  const newestStats = stats[0];
+  const oldestStats = stats[stats.length - 1];
+  const oldestShortFunding = parseFloat(oldestStats.shortFunding);
+  const oldestLongFunding = parseFloat(oldestStats.longFunding);
+  const newestShortFunding = parseFloat(newestStats.shortFunding);
+  const newestLongFunding = parseFloat(newestStats.longFunding);
+  const newestOraclePrice = parseFloat(newestStats.baseOraclePrice);
+  const startFunding = (oldestLongFunding + oldestShortFunding) / 2;
+  const endFunding = (newestLongFunding + newestShortFunding) / 2;
+  const fundingDifference = endFunding - startFunding;
+
+  const fundingRate = fundingDifference / newestOraclePrice / 100;
+  cache.set(cacheKey, fundingRate, 300);
+  return fundingRate;
+};
+
+const getMangoUserInfo = async (
+  connection: Connection,
+  mangoAccount: MangoAccount,
+  mangoGroup: MangoGroup
+) => {
+  const cacheKey = `mango_user_info_${mangoAccount.publicKey.toString()}`;
+  const value = cache.get(cacheKey);
+  if (value) {
+    console.log('cache hit', cacheKey);
+    return value;
+  }
+  console.log('cache miss', cacheKey);
+
+  const solPerpMarket = await mangoGroup.loadPerpMarket(connection, 3, 9, 6);
+  const btcPerpMarket = await mangoGroup.loadPerpMarket(connection, 1, 6, 6);
+  const avaxPerpMarket = await mangoGroup.loadPerpMarket(connection, 12, 8, 6);
+  const lunaPerpMarket = await mangoGroup.loadPerpMarket(connection, 13, 6, 6);
+  const mangoPositions = {
+    'SOL-PERP': mangoAccount.getPerpPositionUi(3, solPerpMarket),
+    'BTC-PERP': mangoAccount.getPerpPositionUi(1, btcPerpMarket),
+    'AVAX-PERP': mangoAccount.getPerpPositionUi(12, avaxPerpMarket),
+    'LUNA-PERP': mangoAccount.getPerpPositionUi(13, lunaPerpMarket),
+    'ETH-PERP': mangoAccount.getPerpPositionUi(2, lunaPerpMarket),
+  };
+  const mangoAccountValue =
+    mangoAccount.getEquityUi(
+      mangoGroup,
+      await mangoGroup.loadCache(connection)
+    ) * 1000000;
+
+  const r = { mangoPositions, mangoAccountValue };
+
+  cache.set(cacheKey, r, 120);
+  return r;
+};
+
+const getDriftUserInfo = async (
+  connection: Connection,
+  accountOwner: PublicKey
+) => {
+  const cacheKey = `drift_user_info_${accountOwner.toString()}`;
+  const value = cache.get(cacheKey);
+  if (value) {
+    console.log('cache hit', cacheKey);
+    return value;
+  }
+  console.log('cache miss', cacheKey);
+
+  const clearingHouse = ClearingHouse.from(connection, null, DRIFT_PROGRAM_KEY);
+  await clearingHouse.subscribe();
+  const driftUser = ClearingHouseUser.from(clearingHouse, accountOwner);
+  await driftUser.subscribe();
+  const driftPositions = driftUser.getUserPositionsAccount().positions;
+  const driftAccountValue = driftUser.getTotalCollateral().toNumber() / 1000000;
+  const driftFreeCollateral =
+    driftUser.getFreeCollateral().toNumber() / 1000000;
+
+  const r = {
+    driftPositions,
+    driftAccountValue,
+    driftFreeCollateral,
+  };
+
+  cache.set(cacheKey, r, 120);
+
+  return r;
 };
 
 export default async function handler(
@@ -126,78 +294,32 @@ export default async function handler(
     mangoAccountPk,
     MANGO_PROGRAM_KEY
   );
-  const getMangoPositions = async (
-    connection,
-    mangoGroup: MangoGroup,
-    mangoAccount: MangoAccount
-  ) => {
-    const solPerpMarket = await mangoGroup.loadPerpMarket(connection, 3, 9, 6);
-    const btcPerpMarket = await mangoGroup.loadPerpMarket(connection, 1, 6, 6);
-    const avaxPerpMarket = await mangoGroup.loadPerpMarket(
-      connection,
-      12,
-      8,
-      6
-    );
-    const lunaPerpMarket = await mangoGroup.loadPerpMarket(
-      connection,
-      13,
-      6,
-      6
-    );
-    return {
-      'SOL-PERP': mangoAccount.getPerpPositionUi(3, solPerpMarket),
-      'BTC-PERP': mangoAccount.getPerpPositionUi(1, btcPerpMarket),
-      'AVAX-PERP': mangoAccount.getPerpPositionUi(12, avaxPerpMarket),
-      'LUNA-PERP': mangoAccount.getPerpPositionUi(13, lunaPerpMarket),
-      'ETH-PERP': mangoAccount.getPerpPositionUi(2, lunaPerpMarket),
-    };
-  };
 
-  const mangoPositions = await getMangoPositions(
+  const { mangoPositions, mangoAccountValue } = await getMangoUserInfo(
     connection,
-    mangoGroup,
-    mangoAccount
+    mangoAccount,
+    mangoGroup
   );
-  const mangoAccountValue =
-    mangoAccount.getEquityUi(
-      mangoGroup,
-      await mangoGroup.loadCache(connection)
-    ) * 1000000;
+  const mangoDailyFundingRateProfit = parseFloat(
+    await getMangoFundingRatesDayProfit(mangoAccount.publicKey.toString())
+  );
+
   const clearingHouse = ClearingHouse.from(connection, null, DRIFT_PROGRAM_KEY);
   await clearingHouse.subscribe();
-
   const driftUser = ClearingHouseUser.from(clearingHouse, accountOwner);
   await driftUser.subscribe();
-  const driftPositions = driftUser.getUserPositionsAccount().positions;
-  const driftAccountValue = driftUser.getTotalCollateral().toNumber() / 1000000;
-  const driftFreeCollateral = driftUser.getFreeCollateral().toNumber() / 1000000;
+  const driftDailyFundingRateProfit = parseFloat(
+    await getDriftFundingRateDayProfit(
+      (await driftUser.getUserAccountPublicKey()).toString()
+    )
+  );
+
+  const { driftPositions, driftAccountValue, driftFreeCollateral } =
+    await getDriftUserInfo(connection, accountOwner);
 
   /// calculate for funding revenue, apy etc.
   await Promise.all(
     driftPositions.map(async (p) => {
-      const getMangoFundings = async (marketName) => {
-        const stats = await (
-          await fetch(
-            `https://mango-stats-v3.herokuapp.com/perp/funding_rate?mangoGroup=mainnet.1&market=${marketName}`
-          )
-        ).json();
-
-        const newest_stats = stats[0];
-        const oldest_stats = stats[stats.length - 1];
-        const oldest_short_funding = parseFloat(oldest_stats.shortFunding);
-        const oldest_long_funding = parseFloat(oldest_stats.longFunding);
-        const newest_short_funding = parseFloat(newest_stats.shortFunding);
-        const newest_long_funding = parseFloat(newest_stats.longFunding);
-        const newest_oracle_price = parseFloat(newest_stats.baseOraclePrice);
-        const start_funding = (oldest_long_funding + oldest_short_funding) / 2;
-        const end_funding = (newest_long_funding + newest_short_funding) / 2;
-        const funding_difference = end_funding - start_funding;
-
-        const funding_rate = funding_difference / newest_oracle_price / 100;
-        console.log(marketName, funding_rate);
-        return funding_rate;
-      };
       let marketName = '';
       switch (p.marketIndex.toNumber()) {
         case 0:
@@ -223,7 +345,7 @@ export default async function handler(
       }
 
       const mangoFundingRate =
-        (await getMangoFundings(marketNamePerp)) * 24 * 365;
+        (await getMangoFundingRates(marketNamePerp)) * 24 * 365;
 
       const driftBase =
         p.baseAssetAmount.div(new BN('10000000000')).toNumber() / 1000;
@@ -271,7 +393,7 @@ export default async function handler(
   clearingHouse.unsubscribe();
   driftUser.unsubscribe();
 
-  res.status(200).json({
+  const r = {
     accountInitialized: true,
     mangoAccount: mangoAccountPk,
     positionUi: positionsUi,
@@ -280,6 +402,10 @@ export default async function handler(
     mangoAccountValue,
     driftAccountValue,
     userUsdcBalance,
-    driftFreeCollateral
-  });
+    driftFreeCollateral,
+    mangoDailyFundingRateProfit,
+    driftDailyFundingRateProfit,
+  };
+
+  res.status(200).json(r);
 }
