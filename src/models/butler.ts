@@ -328,12 +328,7 @@ export type Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "userDriftCollateralAccount",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "userMangoCollateralAccount",
+                    "name": "userUsdcAtaAccount",
                     "isMut": true,
                     "isSigner": false
                 },
@@ -439,7 +434,12 @@ export type Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "userMangoCollateralAccount",
+                    "name": "userUsdcAtaAccount",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "butlerDriftCollateralVault",
                     "isMut": true,
                     "isSigner": false
                 },
@@ -451,11 +451,6 @@ export type Butler = {
                 {
                     "name": "butlerAccountOwner",
                     "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "butlerDriftCollateralVault",
-                    "isMut": true,
                     "isSigner": false
                 },
                 {
@@ -544,12 +539,7 @@ export type Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "userDriftCollateralAccount",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "userMangoCollateralAccount",
+                    "name": "userUsdcAtaAccount",
                     "isMut": true,
                     "isSigner": false
                 },
@@ -624,7 +614,7 @@ export type Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "butlerUserPubkey",
+                    "name": "userPubkey",
                     "isMut": false,
                     "isSigner": false
                 },
@@ -684,7 +674,7 @@ export type Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "userMangoCollateralAccount",
+                    "name": "userUsdcAtaAccount",
                     "isMut": true,
                     "isSigner": false
                 },
@@ -749,7 +739,7 @@ export type Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "butlerUserPubkey",
+                    "name": "userPubkey",
                     "isMut": false,
                     "isSigner": false
                 },
@@ -928,7 +918,7 @@ export type Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "userPk",
+                    "name": "userPubkey",
                     "isMut": true,
                     "isSigner": false
                 },
@@ -952,10 +942,6 @@ export type Butler = {
                     "type": {
                         "defined": "PositionDirection"
                     }
-                },
-                {
-                    "name": "quoteAssetAmount",
-                    "type": "u128"
                 },
                 {
                     "name": "marketIndex",
@@ -1093,7 +1079,7 @@ export type Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "userPk",
+                    "name": "userPubkey",
                     "isMut": true,
                     "isSigner": false
                 },
@@ -1111,141 +1097,6 @@ export type Butler = {
                 {
                     "name": "butlerUserConfigBump",
                     "type": "u8"
-                }
-            ]
-        },
-        {
-            "name": "closeArbOrder",
-            "accounts": [
-                {
-                    "name": "butlerAccountOwner",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseState",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseUser",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseUserPositions",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseProgram",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseMarkets",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "oracle",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseFundingPaymentHistory",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseFundingRateHistory",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseTradeHistory",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "mangoProgram",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "mangoGroupAi",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "mangoAccountPk",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "mangoCacheAi",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "perpMarketAi",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "bidsAi",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "asksAi",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "eventQueueAi",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "emptyAi",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "signer",
-                    "isMut": true,
-                    "isSigner": true
-                }
-            ],
-            "args": [
-                {
-                    "name": "accountOwnerBump",
-                    "type": "u8"
-                },
-                {
-                    "name": "direction",
-                    "type": {
-                        "defined": "PositionDirection"
-                    }
-                },
-                {
-                    "name": "quoteAssetAmount",
-                    "type": "u128"
-                },
-                {
-                    "name": "marketIndex",
-                    "type": "u64"
-                },
-                {
-                    "name": "spread",
-                    "type": "u64"
-                },
-                {
-                    "name": "optionalAccounts",
-                    "type": {
-                        "defined": "ManagePositionOptionalAccounts"
-                    }
                 }
             ]
         },
@@ -1428,7 +1279,7 @@ export type Butler = {
             "name": "CreateUserAccountEvent",
             "fields": [
                 {
-                    "name": "userWallet",
+                    "name": "userPubkey",
                     "type": "publicKey",
                     "index": false
                 },
@@ -1450,26 +1301,16 @@ export type Butler = {
             ]
         },
         {
-            "name": "CreateUserAccountEvent",
+            "name": "DepositCollateralEvent",
             "fields": [
                 {
-                    "name": "userPubkey",
+                    "name": "userWallet",
                     "type": "publicKey",
                     "index": false
                 },
                 {
-                    "name": "butlerAccountOwner",
-                    "type": "publicKey",
-                    "index": false
-                },
-                {
-                    "name": "mangoAccount",
-                    "type": "publicKey",
-                    "index": false
-                },
-                {
-                    "name": "driftAccount",
-                    "type": "publicKey",
+                    "name": "amount",
+                    "type": "u64",
                     "index": false
                 }
             ]
@@ -1545,6 +1386,11 @@ export type Butler = {
             "code": 6004,
             "name": "MaxDepositReached",
             "msg": "Max deposit reached"
+        },
+        {
+            "code": 6005,
+            "name": "UnknownSignerOnWithdraw",
+            "msg": "Unknown signer on withdraw"
         }
     ]
 };
@@ -1879,12 +1725,7 @@ export const IDL: Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "userDriftCollateralAccount",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "userMangoCollateralAccount",
+                    "name": "userUsdcAtaAccount",
                     "isMut": true,
                     "isSigner": false
                 },
@@ -1990,7 +1831,12 @@ export const IDL: Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "userMangoCollateralAccount",
+                    "name": "userUsdcAtaAccount",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "butlerDriftCollateralVault",
                     "isMut": true,
                     "isSigner": false
                 },
@@ -2002,11 +1848,6 @@ export const IDL: Butler = {
                 {
                     "name": "butlerAccountOwner",
                     "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "butlerDriftCollateralVault",
-                    "isMut": true,
                     "isSigner": false
                 },
                 {
@@ -2095,12 +1936,7 @@ export const IDL: Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "userDriftCollateralAccount",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "userMangoCollateralAccount",
+                    "name": "userUsdcAtaAccount",
                     "isMut": true,
                     "isSigner": false
                 },
@@ -2175,7 +2011,7 @@ export const IDL: Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "butlerUserPubkey",
+                    "name": "userPubkey",
                     "isMut": false,
                     "isSigner": false
                 },
@@ -2235,7 +2071,7 @@ export const IDL: Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "userMangoCollateralAccount",
+                    "name": "userUsdcAtaAccount",
                     "isMut": true,
                     "isSigner": false
                 },
@@ -2300,7 +2136,7 @@ export const IDL: Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "butlerUserPubkey",
+                    "name": "userPubkey",
                     "isMut": false,
                     "isSigner": false
                 },
@@ -2479,7 +2315,7 @@ export const IDL: Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "userPk",
+                    "name": "userPubkey",
                     "isMut": true,
                     "isSigner": false
                 },
@@ -2503,10 +2339,6 @@ export const IDL: Butler = {
                     "type": {
                         "defined": "PositionDirection"
                     }
-                },
-                {
-                    "name": "quoteAssetAmount",
-                    "type": "u128"
                 },
                 {
                     "name": "marketIndex",
@@ -2644,7 +2476,7 @@ export const IDL: Butler = {
                     "isSigner": false
                 },
                 {
-                    "name": "userPk",
+                    "name": "userPubkey",
                     "isMut": true,
                     "isSigner": false
                 },
@@ -2662,141 +2494,6 @@ export const IDL: Butler = {
                 {
                     "name": "butlerUserConfigBump",
                     "type": "u8"
-                }
-            ]
-        },
-        {
-            "name": "closeArbOrder",
-            "accounts": [
-                {
-                    "name": "butlerAccountOwner",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseState",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseUser",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseUserPositions",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseProgram",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseMarkets",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "oracle",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseFundingPaymentHistory",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseFundingRateHistory",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "clearingHouseTradeHistory",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "mangoProgram",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "mangoGroupAi",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "mangoAccountPk",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "mangoCacheAi",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "perpMarketAi",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "bidsAi",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "asksAi",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "eventQueueAi",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "emptyAi",
-                    "isMut": false,
-                    "isSigner": false
-                },
-                {
-                    "name": "signer",
-                    "isMut": true,
-                    "isSigner": true
-                }
-            ],
-            "args": [
-                {
-                    "name": "accountOwnerBump",
-                    "type": "u8"
-                },
-                {
-                    "name": "direction",
-                    "type": {
-                        "defined": "PositionDirection"
-                    }
-                },
-                {
-                    "name": "quoteAssetAmount",
-                    "type": "u128"
-                },
-                {
-                    "name": "marketIndex",
-                    "type": "u64"
-                },
-                {
-                    "name": "spread",
-                    "type": "u64"
-                },
-                {
-                    "name": "optionalAccounts",
-                    "type": {
-                        "defined": "ManagePositionOptionalAccounts"
-                    }
                 }
             ]
         },
@@ -2979,7 +2676,7 @@ export const IDL: Butler = {
             "name": "CreateUserAccountEvent",
             "fields": [
                 {
-                    "name": "userWallet",
+                    "name": "userPubkey",
                     "type": "publicKey",
                     "index": false
                 },
@@ -3001,26 +2698,16 @@ export const IDL: Butler = {
             ]
         },
         {
-            "name": "CreateUserAccountEvent",
+            "name": "DepositCollateralEvent",
             "fields": [
                 {
-                    "name": "userPubkey",
+                    "name": "userWallet",
                     "type": "publicKey",
                     "index": false
                 },
                 {
-                    "name": "butlerAccountOwner",
-                    "type": "publicKey",
-                    "index": false
-                },
-                {
-                    "name": "mangoAccount",
-                    "type": "publicKey",
-                    "index": false
-                },
-                {
-                    "name": "driftAccount",
-                    "type": "publicKey",
+                    "name": "amount",
+                    "type": "u64",
                     "index": false
                 }
             ]
@@ -3096,6 +2783,11 @@ export const IDL: Butler = {
             "code": 6004,
             "name": "MaxDepositReached",
             "msg": "Max deposit reached"
+        },
+        {
+            "code": 6005,
+            "name": "UnknownSignerOnWithdraw",
+            "msg": "Unknown signer on withdraw"
         }
     ]
 };
