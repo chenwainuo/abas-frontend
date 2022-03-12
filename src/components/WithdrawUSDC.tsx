@@ -2,7 +2,11 @@ import { FC, useCallback } from 'react';
 
 import { ClearingHouse } from '@drift-labs/sdk';
 import { Program } from '@project-serum/anchor';
-import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  Token,
+  TOKEN_PROGRAM_ID,
+} from '@solana/spl-token';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey, Transaction, TransactionSignature } from '@solana/web3.js';
 
@@ -165,7 +169,9 @@ export const WithdrawUSDC: FC<WithdrawUSDCProps> = (props) => {
     const mangoQuantityNative = new anchor.BN(mangoWithdrawValue * 1000000);
     const driftQuantityNative = new anchor.BN(driftWithdrawValue * 1000000);
 
-    const userUsdcAtaAccount = await getAssociatedTokenAddress(
+    const userUsdcAtaAccount = await Token.getAssociatedTokenAddress(
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+      TOKEN_PROGRAM_ID,
       USDC_MINT_KEY,
       publicKey
     );
