@@ -10,6 +10,8 @@ import {
   TransactionSignature,
 } from '@solana/web3.js';
 
+import { notify } from '@/utils/notifications';
+
 import { Butler } from '../models/butler';
 import {
   BUTLER_PROGRAM_KEY,
@@ -19,7 +21,6 @@ import {
   MANGO_PROGRAM_KEY,
   USDC_MINT_KEY,
 } from '../models/constants';
-import { notify } from '../utils/notifications';
 
 export type CreateButlerAccountProps = {
   publicKey?: PublicKey | null;
@@ -215,7 +216,7 @@ export const CreateButlerAccount: FC<CreateButlerAccountProps> = (props) => {
   return (
     <div>
       <button
-        className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."
+        className="m-2 bg-gradient-to-r from-[#9945FF] hover:from-pink-500 to-[#14F195] hover:to-yellow-500 btn ..."
         onClick={onClick}
         disabled={!props.publicKey}
       >

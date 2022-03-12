@@ -1,18 +1,23 @@
-import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document'
+import Document, {
+  Html,
+  Head,
+  Main,
+  NextScript,
+  DocumentContext,
+} from 'next/document';
 
+// Need to create a custom _document because i18n support is not compatible with `next export`.
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
-    const initialProps = await Document.getInitialProps(ctx)
+    const initialProps = await Document.getInitialProps(ctx);
 
-    return initialProps
+    return initialProps;
   }
 
   render() {
     return (
-      <Html>
-        <Head>
-        <link rel="shortcut icon" href="/favicon.ico"/>
-        </Head>
+      <Html lang="en">
+        <Head />
         <body>
           <Main />
           <NextScript />

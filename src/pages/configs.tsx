@@ -1,17 +1,24 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
 
-import { ConfigsView } from '../views';
+import { Meta } from '@/layout/Meta';
+import { Main } from '@/templates/Main';
+import { ConfigsView } from '@/views/configs';
 
 const Configs: NextPage = (props) => {
   return (
-    <div>
-      <Head>
-        <title>Abas Finance</title>
-        <meta name="description" content="Token Basics" />
-      </Head>
+    <Main
+      meta={
+        <Meta title="Abas Finance" description="Abas Finance configuration" />
+      }
+    >
       <ConfigsView />
-    </div>
+    </Main>
+    // <div>
+    // <Head>
+    // <title>Abas Finance</title>
+    // <meta name="description" content="Token Basics" />
+    // </Head>
+    // </div>
   );
 };
 

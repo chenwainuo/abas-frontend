@@ -1,8 +1,7 @@
 import { FC } from 'react';
 
+import { UserConfig } from '@/components/UserConfig';
 import { useUserInfoContext } from '@/contexts/UserInfoProvider';
-
-import { UserConfig } from '../../components/UserConfig';
 
 export const ConfigsView: FC = () => {
   const { data, isLoading } = useUserInfoContext();
@@ -15,8 +14,8 @@ export const ConfigsView: FC = () => {
   }
 
   return (
-    <div className="hero mx-auto p-4 min-h-16 py-4">
-      <div className="hero-content flex flex-col max-w-lg">
+    <div className="p-4 py-4 mx-auto hero min-h-16">
+      <div className="flex flex-col max-w-lg hero-content">
         <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-tr from-[#9945FF] to-[#14F195]">
           Abas
         </h1>
