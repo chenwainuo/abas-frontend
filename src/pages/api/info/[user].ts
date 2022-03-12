@@ -398,8 +398,8 @@ export default async function handler(
   const userUsdcBalance = await getAccountBalance(connection, userPkey);
 
   console.log('user usdc balance', userUsdcBalance);
-  clearingHouse.unsubscribe();
-  driftUser.unsubscribe();
+  await clearingHouse.unsubscribe();
+  await driftUser.unsubscribe();
 
   const r = {
     accountInitialized: true,
