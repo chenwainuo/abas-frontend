@@ -11,6 +11,7 @@ module.exports = withBundleAnalyzer({
   //--------------------------
   eslint: {
     dirs: ['.'],
+    ignoreBuildErrors: true,
   },
   poweredByHeader: false,
   trailingSlash: true,
