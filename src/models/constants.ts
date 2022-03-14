@@ -145,4 +145,5 @@ export const WHITELIST_PUBKEY = [
   'Gyfp12eAkPSw8MUcMcNH4EpHoZYoGs85Jg6tMsewxqYE',
   '5enYxq4sKxeS7AjekFbpnAJo3af51JfJjp7uN69fkdFK',
   'Gx4opTiUnMxYhLAd3T9qd92kWPwdABUPXd13xhfmG5nj',
+  '9e7ag77LVPbQF4UvgHZ7GYJ5g2YKC7krqQV91BrgEdc6', /// jk
 ];
