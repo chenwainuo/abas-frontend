@@ -35,8 +35,6 @@ export type UserInfoData = {
   driftAccountValue: number;
   userUsdcBalance: number;
   driftFreeCollateral: number;
-  mangoDailyFundingRateProfit: number;
-  driftDailyFundingRateProfit: number;
 };
 
 const getAccountBalance = async (
@@ -300,21 +298,11 @@ export default async function handler(
     mangoAccount,
     mangoGroup
   );
-  const mangoDailyFundingRateProfit = parseFloat(
-    await getMangoFundingRatesDayProfit(mangoAccount.publicKey.toString())
-  );
-
-  console.log('mangoDailyFundingRateProfit', mangoDailyFundingRateProfit);
 
   const clearingHouse = ClearingHouse.from(connection, null, DRIFT_PROGRAM_KEY);
   await clearingHouse.subscribe();
   const driftUser = ClearingHouseUser.from(clearingHouse, accountOwner);
   await driftUser.subscribe();
-  const driftDailyFundingRateProfit = parseFloat(
-    await getDriftFundingRateDayProfit(
-      (await driftUser.getUserAccountPublicKey()).toString()
-    )
-  );
 
   const { driftPositions, driftAccountValue, driftFreeCollateral } =
     await getDriftUserInfo(connection, accountOwner);
@@ -411,8 +399,6 @@ export default async function handler(
     driftAccountValue,
     userUsdcBalance,
     driftFreeCollateral,
-    mangoDailyFundingRateProfit,
-    driftDailyFundingRateProfit,
   };
 
   res.status(200).json(r);
