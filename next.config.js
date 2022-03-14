@@ -1,29 +1,23 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+/* eslint-disable import/no-extraneous-dependencies */
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withBundleAnalyzer({
+  // todo remove this once everything is cleaned up
   typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
     ignoreBuildErrors: true,
   },
+  //--------------------------
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
+    dirs: ['.'],
     ignoreDuringBuilds: true,
   },
+  poweredByHeader: false,
+  trailingSlash: true,
+  basePath: '',
+  // The starter code load resources from `public` folder with `router.basePath` in React components.
+  // So, the source code is "basePath-ready".
+  // You can remove `basePath` if you don't need it.
   reactStrictMode: true,
-  webpack: (config) => {
-    config.resolve = {
-      ...config.resolve,
-      fallback: {
-        fs: false,
-        path: false,
-        os: false,
-      },
-    };
-    return config;
-  },
-};
-
-module.exports = nextConfig;
+});

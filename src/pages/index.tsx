@@ -1,20 +1,13 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import { HomeView } from "../views";
+import { Meta } from '@/layout/Meta';
+import { Main } from '@/templates/Main';
+import { HomeView } from '@/views';
 
-const Home: NextPage = (props) => {
+const Index = () => {
   return (
-    <div>
-      <Head>
-        <title>Abas Finance</title>
-        <meta
-          name="description"
-          content="Abas Finance"
-        />
-      </Head>
+    <Main meta={<Meta title="Abas Finance" description="description" />}>
       <HomeView />
-    </div>
+    </Main>
   );
 };
 
-export default Home;
+export default Index;

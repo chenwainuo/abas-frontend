@@ -21,7 +21,7 @@ export const AppBar: FC = (props) => {
   return (
     <div className="flex-none p-2">
       {/* NavBar / Header */}
-      <div className="navbar mb-2 shadow-lg bg-neutral text-neutral-content">
+      <div className="mb-2 shadow-lg navbar bg-neutral text-neutral-content">
         <div className="px-2 mx-2 navbar-start">
           <div className="p-2">
             <svg
@@ -86,7 +86,7 @@ export const AppBar: FC = (props) => {
         </div>
 
         {/* Nav Links */}
-        <div className="navbar-center lg:flex">
+        <div className="lg:flex navbar-center">
           <div className="flex items-stretch">
             <Link href="/">
               <div className="btn btn-ghost btn-sm rounded-btn">App</div>
@@ -106,7 +106,7 @@ export const AppBar: FC = (props) => {
             <div tabIndex={0} className="btn btn-square btn-ghost">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
+                className="w-6 h-6"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -127,7 +127,7 @@ export const AppBar: FC = (props) => {
             </div>
             <ul
               tabIndex={0}
-              className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
+              className="p-2 w-52 shadow menu dropdown-content bg-base-100 rounded-box"
             >
               <li>
                 <div className="form-control">
@@ -150,7 +150,7 @@ export const AppBar: FC = (props) => {
               </li>
             </ul>
           </div>
-          <WalletMultiButton className="btn btn-ghost mr-2" />
+          <WalletMultiButton className="mr-2 btn btn-ghost" />
         </div>
       </div>
       {props.children}

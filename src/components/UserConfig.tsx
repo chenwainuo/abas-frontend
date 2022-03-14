@@ -51,6 +51,63 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+const getHelperText = (
+  openSpread: number,
+  closeSpread: number,
+  mode: number
+) => {
+  openSpread /= 100;
+  closeSpread /= 100;
+  if (mode === 0) {
+    const mode =
+      'Under this configuration, Abas Keeper is able to open new position and close existing position under your accounts.';
+    const open = `Abas will only create new position if the sell price is ${openSpread}% higher than the buy price.`;
+    const closePositive = `Abas will close existing position if the buy price is ${closeSpread}% lower than the sell price.`;
+    const closeZero = `Abas will close existing position if the sell price is the same as buy price.`;
+    const closeNegative = `Abas will close existing position if the buy price is at max ${Math.abs(
+      closeSpread
+    )}% higher than the sell price. Please only select a negative close spread if you wish to exit position for withdraw.`;
+
+    let close = '';
+    if (closeSpread === 0) {
+      close = closeZero;
+    }
+    if (closeSpread > 0) {
+      close = closePositive;
+    }
+    if (closeSpread < 0) {
+      close = closeNegative;
+    }
+    return [mode, open, close];
+  }
+  if (mode === 1) {
+    const mode =
+      'Under this configuration, Abas Keeper will not perform any trades on your account, you will keep your current positions.';
+    return [mode, '', ''];
+  }
+  if (mode === 2) {
+    const mode =
+      'Under this configuration, Abas Keeper will only close your positions allowing you to withdraw USDC.';
+    const closePositive = `Abas will close existing position if the sell price is ${closeSpread}% higher than the buy price. A positive close spread may delay your exit position process`;
+    const closeZero = `Abas will close existing position if the sell price is the same as buy price.`;
+    const closeNegative = `Abas will close existing position if the buy price is at max ${Math.abs(
+      closeSpread
+    )}% higher than the sell price. For faster withdraw you may choose up to 1% close spread but may lose up to 1% on every trade.`;
+    let close = '';
+    if (closeSpread === 0) {
+      close = closeZero;
+    }
+    if (closeSpread > 0) {
+      close = closePositive;
+    }
+    if (closeSpread < 0) {
+      close = closeNegative;
+    }
+    return [mode, '', close];
+  }
+  return ['', '', '']; /// ??
+};
+
 export const UserConfig: FC<UserConfigProps> = (props) => {
   const connection = new Connection(RPC_URL);
   const { publicKey, sendTransaction, wallet } = useWallet();
@@ -149,6 +206,12 @@ export const UserConfig: FC<UserConfigProps> = (props) => {
   const displayCloseSpread =
     closeSpread === '' ? props.userConfig.closeSpread : closeSpread;
 
+  const [modeText, openText, closeText] = getHelperText(
+    parseInt(displayOpenSpread),
+    parseInt(displayCloseSpread),
+    parseInt(displayMode)
+  );
+
   return (
     <div>
       <div>
@@ -166,40 +229,50 @@ export const UserConfig: FC<UserConfigProps> = (props) => {
           </Select>
         </FormControl>
       </div>
-      <div>
-        <p>Open Spread</p>
-        <FormControl fullWidth>
-          <Select
-            value={displayOpenSpread}
-            label="Mode"
-            onChange={handleOpenSpreadChange}
-            input={<BootstrapInput />}
-          >
-            <MenuItem value={50}>50</MenuItem>
-            <MenuItem value={30}>30</MenuItem>
-            <MenuItem value={15}>15</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
-      <div>
-        <p>Close Spread</p>
-        <FormControl fullWidth sx={{ borderColor: 'white' }}>
-          <Select
-            value={displayCloseSpread}
-            label="Mode"
-            onChange={handleCloseSpreadChange}
-            input={<BootstrapInput />}
-          >
-            <MenuItem value={30}>30</MenuItem>
-            <MenuItem value={15}>15</MenuItem>
-            <MenuItem value={10}>10</MenuItem>
-            <MenuItem value={0}>0</MenuItem>
-            <MenuItem value={-10}>-10</MenuItem>
-            <MenuItem value={-15}>-15</MenuItem>
-            <MenuItem value={-30}>-30</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
+      {displayMode === 0 ? (
+        <div>
+          <p>Open Spread</p>
+          <FormControl fullWidth>
+            <Select
+              value={displayOpenSpread}
+              label="Mode"
+              onChange={handleOpenSpreadChange}
+              input={<BootstrapInput />}
+            >
+              <MenuItem value={50}>0.50%</MenuItem>
+              <MenuItem value={45}>0.45%</MenuItem>
+              <MenuItem value={30}>0.30%</MenuItem>
+              <MenuItem value={15}>0.15%</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+      ) : (
+        <div />
+      )}
+      {displayMode === 0 || displayMode === 2 ? (
+        <div>
+          <p>Close Spread</p>
+          <FormControl fullWidth sx={{ borderColor: 'white' }}>
+            <Select
+              value={displayCloseSpread}
+              label="Mode"
+              onChange={handleCloseSpreadChange}
+              input={<BootstrapInput />}
+            >
+              <MenuItem value={30}>0.30%</MenuItem>
+              <MenuItem value={15}>0.15%</MenuItem>
+              <MenuItem value={10}>0.10%</MenuItem>
+              <MenuItem value={0}>0%</MenuItem>
+              <MenuItem value={-10}>-0.10%</MenuItem>
+              <MenuItem value={-15}>-0.15%</MenuItem>
+              <MenuItem value={-30}>-0.30%</MenuItem>
+              <MenuItem value={-100}>-1%</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
+      ) : (
+        <div />
+      )}
       <p>Trade Size: {props.userConfig?.tradeSize}</p>
       <button
         className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."
