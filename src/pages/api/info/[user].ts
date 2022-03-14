@@ -215,6 +215,9 @@ const getDriftUserInfo = async (
 
   cache.set(cacheKey, r, 120);
 
+  await clearingHouse.unsubscribe();
+  await driftUser.unsubscribe();
+
   return r;
 };
 
