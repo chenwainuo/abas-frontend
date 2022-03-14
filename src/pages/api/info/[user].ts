@@ -39,6 +39,7 @@ export type UserInfoData = {
   driftAccountValue: number;
   userUsdcBalance: number;
   driftFreeCollateral: number;
+  depositLimit: number;
   mangoDailyFundingRateProfit: number;
   driftDailyFundingRateProfit: number;
 };
@@ -410,6 +411,7 @@ export default async function handler(
   const r = {
     accountInitialized: true,
     mangoAccount: mangoAccountPk,
+    depositLimit: 10000,
     positionUi: positionsUi,
     butlerAccountOwner: accountOwner,
     userConfig,

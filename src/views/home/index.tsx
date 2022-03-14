@@ -5,6 +5,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { AccountTable } from '@/components/AccountTable';
 import { CreateButlerAccount } from '@/components/CreateButlerAccount';
 import { DepositUSDC } from '@/components/DepositUSDC';
+import { DepositModal } from '@/components/DespositModal';
 import { WithdrawUSDC } from '@/components/WithdrawUSDC';
 import { useUserInfoContext } from '@/contexts/UserInfoProvider';
 import { WHITELIST_PUBKEY } from '@/models/constants';
@@ -73,6 +74,13 @@ export const HomeView: FC = () => {
                   Mango Account
                 </button>
               </a>
+              <DepositModal
+                usdcBalannce={data!.userUsdcBalance}
+                currentColateral={
+                  data!.driftAccountValue + data!.mangoAccountValue
+                }
+                depositLimit={data!.depositLimit}
+              />
               <DepositUSDC
                 {...{
                   mangoAccount: data.mangoAccount,

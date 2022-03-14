@@ -1,6 +1,6 @@
 import { Meta } from '@/layout/Meta';
 import { Main } from '@/templates/Main';
-import { HomeView } from '@/views';
+import { HomeView } from '@/views/home';
 
 const Index = () => {
   return (

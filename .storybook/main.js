@@ -29,6 +29,7 @@ module.exports = {
     config.resolve.alias = {
       ...config.resolve.alias,
       // "@/*": ["./src/*"],
+      "@/utils": path.resolve(__dirname, "../src/utils"),
       "@/components": path.resolve(__dirname, "../src/components")
     },
     config.module.rules.push({

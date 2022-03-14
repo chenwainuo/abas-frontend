@@ -15,7 +15,12 @@ export default {
 } as ComponentMeta<typeof DepositModal>;
 
 const Template: ComponentStory<typeof DepositModal> = (args) => (
-  <DepositModal />
+  <DepositModal {...args} />
 );
 
 export const Primary = Template.bind({});
+Primary.args = {
+  usdcBalannce: 10000,
+  depositLimit: 6000,
+  currentColateral: 3000,
+};

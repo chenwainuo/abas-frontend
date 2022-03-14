@@ -1,29 +1,47 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
-/**
- * Primary UI component for user interaction
- */
-export const DepositModal = () => {
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+
+import Input from '@/components/Input';
+import { numberToCurrency } from '@/utils/currency';
+
+export interface DepositModalProps {
+  usdcBalannce: number;
+  depositLimit: number;
+  currentColateral: number;
+}
+export const DepositModal = ({
+  usdcBalannce,
+  depositLimit,
+  currentColateral,
+}: DepositModalProps) => {
+  const [depositAmount, setDepositAmount] = useState('');
+  const [totalColateral, setTotalColateral] = useState(currentColateral);
+  const [depositOverLimit, setDepositOverLimit] = useState(false);
+  const { connection } = useConnection();
+  const { publicKey, sendTransaction, wallet } = useWallet();
+  const remainingMaxDeposit = depositLimit - currentColateral;
+  const isConfirmDisabled = useCallback(() => {
+    return depositAmount === '';
+  }, [depositAmount]);
+  const onClick = useCallback(async () => {
+    console.log(depositAmount === null, depositAmount === '');
+    console.log('clicked', depositAmount);
+  }, [wallet, publicKey, connection, sendTransaction, depositAmount]);
   return (
     <>
-      <label htmlFor="my-modal-3" className="btn modal-button">
+      <label
+        htmlFor="my-modal-3"
+        className="btn modal-button btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500"
+      >
         Deposit
       </label>
 
       <input type="checkbox" id="my-modal-3" className="modal-toggle" />
-      <div className="modal rounded-md">
-        <div className="modal-box relative p-0 rounded-md">
-          {/* <h3 className="text-lg font-bold left-2">
-            Congratulations random Interner user!
-          </h3>
-          <label
-            htmlFor="my-modal-3"
-            className="btn btn-sm btn-circle absolute right-2 top-2"
-          >
-            ✕
-          </label> */}
-          <div className="flex justify-between items-start rounded-t border-b dark:border-gray-600 pt-5 pb-5 pr-7 pl-7">
-            <h3 className="text-xl font-semibold text-white-600 lg:text-2xl dark:text-white">
+      <div className="modal">
+        <div className="modal-box relative p-0 rounded-md bg-depositModal">
+          <div className="flex justify-between items-start rounded-t border-b border-gray-600 pt-5 pb-5 pr-7 pl-7">
+            <h3 className="text-xl font-semibold lg:text-2xl  bg-clip-text text-transparent  bg-gradient-to-br from-[#9945FF] to-[#14F195]">
               Deposit
             </h3>
             <label
@@ -46,47 +64,75 @@ export const DepositModal = () => {
             </label>
           </div>
 
-          <p className="py-4 pr-7 pl-7">
+          <div className="py-4 pr-7 pl-7 pb-2">
             <div className="form-control w-full ">
               <label className="label">
                 <span className="label-text text-md">Deposit Amount</span>
-                <button>
-                  <span className="label-text-alt underline">Max</span>
-                </button>
               </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  placeholder="100"
-                  className="input input-bordered w-full"
-                />
-                <span className="absolute inset-y-0 right-0 flex items-center pr-2">
-                  <div>USDC</div>
-                </span>
-              </div>
+              {/* <div className="relative"> */}
+              <Input
+                type="number"
+                error={depositOverLimit}
+                errorText="Enter an amount less than deposit limit"
+                leftIcon={<div>USDC</div>}
+                onChange={(e) => {
+                  setDepositOverLimit(
+                    parseFloat(e.target.value) > remainingMaxDeposit
+                  );
+                  setDepositAmount(e.target.value);
+                  setTotalColateral(
+                    currentColateral +
+                      (e.target.value.length === 0
+                        ? 0
+                        : parseFloat(e.target.value))
+                  );
+                }}
+              />
               <label className="label">
+                <span className="label-text-alt" />
                 <span className="label-text-alt">
-                  <div>Remaining Max Deposit: </div>
-                  <div>Wallet USDC Balance: </div>
+                  <div className="text-right">
+                    Remaining Deposit Limit:{' '}
+                    {numberToCurrency('en-US', 'USD', remainingMaxDeposit)}
+                  </div>
+                  <div className="text-right">
+                    Wallet USDC Balance:{' '}
+                    {numberToCurrency('en-US', 'USD', usdcBalannce)}
+                  </div>
                 </span>
               </label>
             </div>
-          </p>
-          <p className="py-4 pr-7 pl-7 pt-10">
-            <div className="text-sm">
-              Don&apos;t have USDC?{' '}
-              <button>
-                <span className="underline">Buy some here</span>
-              </button>
-            </div>
+          </div>
+          <div className="py-4 pr-7 pl-7 pt-2">
             <div className="divider mb-2"></div>
+            <div className="flex justify-between">
+              <div>Current Balance</div>
+              <div>{numberToCurrency('en-US', 'USD', currentColateral)}</div>
+            </div>
+            {isConfirmDisabled() ? null : (
+              <div className="flex justify-between">
+                <div>Deposit Amount</div>
+                <div className="text-green-600">
+                  +{' '}
+                  {numberToCurrency('en-US', 'USD', parseFloat(depositAmount))}
+                </div>
+              </div>
+            )}
+            <div className="divider" />
             <div className="flex justify-between pb-4">
               <div>Total Colateral</div>
-              <div>02</div>
+              <div>{numberToCurrency('en-US', 'USD', totalColateral)}</div>
             </div>
 
-            <button className="btn btn-wide w-full">Confirm Deposit</button>
-          </p>
+            <button
+              disabled={isConfirmDisabled() || depositOverLimit}
+              onClick={onClick}
+              className="btn btn-wide w-full bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500
+                disabled:bg-white"
+            >
+              Confirm Deposit
+            </button>
+          </div>
         </div>
       </div>
     </>
