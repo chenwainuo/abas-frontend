@@ -102,7 +102,7 @@ export const DepositModal = ({
     const [userConfig, userConfigBump] =
       await anchor.web3.PublicKey.findProgramAddress(
         [
-          Buffer.from(anchor.utils.bytes.utf8.encode('user_config_v1')),
+          Buffer.from(anchor.utils.bytes.utf8.encode('butler_user_config_v1')),
           publicKey.toBuffer(),
         ],
         BUTLER_PROGRAM_KEY
@@ -183,11 +183,13 @@ export const DepositModal = ({
         accountOwnerBump,
         butlerDriftCollateralBump,
         butlerMangoCollateralBump,
+        userConfigBump,
         quantityNative,
         false,
         {
           accounts: {
             state,
+            userConfig,
             userUsdcAtaAccount,
             butlerDriftCollateralVault,
             butlerMangoCollateralVault,
@@ -213,11 +215,13 @@ export const DepositModal = ({
           accountOwnerBump,
           butlerMangoCollateralBump,
           butlerDriftCollateralBump,
+          userConfigBump,
           quantityNative,
           false,
           {
             accounts: {
               state,
+              userConfig,
               userUsdcAtaAccount,
               butlerDriftCollateralVault,
               butlerMangoCollateralVault,
