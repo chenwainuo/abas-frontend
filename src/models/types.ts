@@ -1,24 +1,25 @@
-import {PublicKey} from "@solana/web3.js";
+import { PublicKey } from '@solana/web3.js';
 
-export type EndpointTypes = 'mainnet' | 'devnet' | 'localnet'
+export type EndpointTypes = 'mainnet' | 'devnet' | 'localnet';
 
 export type PositionUiRow = {
-    marketNamePerp: String,
-    driftQuote: Number,
-    driftBase: Number,
-    mangoBase: Number,
-    isDriftLong: boolean,
-    driftFundingRate: Number,
-    mangoFundingRate: Number,
-    estFundingRev: Number,
-    estApr: Number
-}
+  marketNamePerp: String;
+  driftQuote: Number;
+  driftBase: Number;
+  mangoBase: Number;
+  isDriftLong: boolean;
+  driftFundingRate: Number;
+  mangoFundingRate: Number;
+  estFundingRev: Number;
+  estApr: Number;
+};
 
 export type UserConfigType = {
-    userPubkey: PublicKey,
-    userCranker: PublicKey,
-    tradeSize: number,
-    openSpread: number,
-    closeSpread: number,
-    mode: number
-}
+  userPubkey: PublicKey;
+  userCranker: PublicKey;
+  tradeSize: number;
+  openSpread: number;
+  closeSpread: number;
+  mode: number;
+  totalDeposited: number;
+};

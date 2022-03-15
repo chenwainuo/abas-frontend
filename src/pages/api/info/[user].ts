@@ -276,14 +276,7 @@ export default async function handler(
     );
 
   const positionsUi = [];
-  let userConfig: UserConfigType = {
-    closeSpread: 0,
-    mode: 0,
-    openSpread: 0,
-    tradeSize: 0,
-    userCranker: undefined,
-    userPubkey: undefined,
-  };
+  let userConfig: UserConfigType;
 
   if (mangoAccountInfo.value == null) {
     res.status(200).json({
@@ -297,6 +290,9 @@ export default async function handler(
     });
   }
   const userConfigData = await program.account.userConfig.fetch(userConfigPk);
+  userConfigData.totalDeposited = userConfigData.totalDeposited
+    .div(new BN('1000000'))
+    .toNumber();
   userConfig = userConfigData;
   const mangoClient = new MangoClient(connection, MANGO_PROGRAM_KEY);
   const mangoGroup = await mangoClient.getMangoGroup(MANGO_GROUP_CONFIG_KEY);

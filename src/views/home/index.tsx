@@ -47,7 +47,12 @@ export const HomeView: FC = () => {
         <div className="p-2 text-center">
           {data.accountInitialized ? (
             <>
-              <AccountDashboard publicKey={wallet.publicKey} />
+              <AccountDashboard
+                {...{
+                  publicKey: wallet.publicKey,
+                  userConfig: data!.userConfig,
+                }}
+              />
               <a
                 target="_blank"
                 href={`https://app.drift.trade/AVAX?authority=${data.butlerAccountOwner.toString()}`}

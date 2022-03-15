@@ -5,9 +5,11 @@ import { PublicKey } from '@solana/web3.js';
 
 import { AccountFundingGraph } from '@/components/AccountFundingGraph';
 import { AccountValueGraph } from '@/components/AccountValueGraph';
+import { UserConfigType } from '@/models/types';
 
 export type AccountDashboardProps = {
   publicKey: PublicKey;
+  userConfig: UserConfigType;
 };
 
 const USER_FUNDING_RATES_REVENUE_1D = gql`
@@ -55,6 +57,7 @@ export const AccountDashboard: FC<AccountDashboardProps> = (
         publicKey={props.publicKey}
         queryResult={fundingRatesQueryResult}
       />
+      <p>User total deposited ${props.userConfig.totalDeposited}</p>
     </div>
   );
 };
