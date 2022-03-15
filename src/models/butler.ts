@@ -250,8 +250,42 @@ export type Butler = {
           type: 'u32';
         },
         {
+          name: 'totalDeposited';
+          type: 'u64';
+        },
+        {
           name: 'mode';
           type: 'u8';
+        }
+      ];
+    },
+    {
+      name: 'backfillUserTotalDeposited';
+      accounts: [
+        {
+          name: 'userConfig';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'userCranker';
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'signer';
+          isMut: true;
+          isSigner: true;
+        }
+      ];
+      args: [
+        {
+          name: 'butlerUserConfigBump';
+          type: 'u8';
+        },
+        {
+          name: 'totalDeposited';
+          type: 'u64';
         }
       ];
     },
@@ -324,6 +358,11 @@ export type Butler = {
       accounts: [
         {
           name: 'state';
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: 'userConfig';
           isMut: true;
           isSigner: false;
         },
@@ -416,6 +455,10 @@ export type Butler = {
           type: 'u8';
         },
         {
+          name: 'butlerUserConfigBump';
+          type: 'u8';
+        },
+        {
           name: 'amount';
           type: 'u64';
         },
@@ -431,6 +474,11 @@ export type Butler = {
         {
           name: 'state';
           isMut: false;
+          isSigner: false;
+        },
+        {
+          name: 'userConfig';
+          isMut: true;
           isSigner: false;
         },
         {
@@ -518,6 +566,10 @@ export type Butler = {
         },
         {
           name: 'butlerDriftCollateralBump';
+          type: 'u8';
+        },
+        {
+          name: 'butlerUserConfigBump';
           type: 'u8';
         },
         {
@@ -1158,9 +1210,31 @@ export type Butler = {
             type: 'u8';
           },
           {
-            name: 'padding';
+            name: 'totalDeposited';
+            type: 'u64';
+          },
+          {
+            name: 'padding1';
             type: {
-              array: ['u8', 64];
+              array: ['u8', 8];
+            };
+          },
+          {
+            name: 'padding2';
+            type: {
+              array: ['u8', 8];
+            };
+          },
+          {
+            name: 'padding3';
+            type: {
+              array: ['u8', 8];
+            };
+          },
+          {
+            name: 'padding4';
+            type: {
+              array: ['u8', 32];
             };
           }
         ];
@@ -1644,8 +1718,42 @@ export const IDL: Butler = {
           type: 'u32',
         },
         {
+          name: 'totalDeposited',
+          type: 'u64',
+        },
+        {
           name: 'mode',
           type: 'u8',
+        },
+      ],
+    },
+    {
+      name: 'backfillUserTotalDeposited',
+      accounts: [
+        {
+          name: 'userConfig',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'userCranker',
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'signer',
+          isMut: true,
+          isSigner: true,
+        },
+      ],
+      args: [
+        {
+          name: 'butlerUserConfigBump',
+          type: 'u8',
+        },
+        {
+          name: 'totalDeposited',
+          type: 'u64',
         },
       ],
     },
@@ -1718,6 +1826,11 @@ export const IDL: Butler = {
       accounts: [
         {
           name: 'state',
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: 'userConfig',
           isMut: true,
           isSigner: false,
         },
@@ -1810,6 +1923,10 @@ export const IDL: Butler = {
           type: 'u8',
         },
         {
+          name: 'butlerUserConfigBump',
+          type: 'u8',
+        },
+        {
           name: 'amount',
           type: 'u64',
         },
@@ -1825,6 +1942,11 @@ export const IDL: Butler = {
         {
           name: 'state',
           isMut: false,
+          isSigner: false,
+        },
+        {
+          name: 'userConfig',
+          isMut: true,
           isSigner: false,
         },
         {
@@ -1912,6 +2034,10 @@ export const IDL: Butler = {
         },
         {
           name: 'butlerDriftCollateralBump',
+          type: 'u8',
+        },
+        {
+          name: 'butlerUserConfigBump',
           type: 'u8',
         },
         {
@@ -2552,9 +2678,31 @@ export const IDL: Butler = {
             type: 'u8',
           },
           {
-            name: 'padding',
+            name: 'totalDeposited',
+            type: 'u64',
+          },
+          {
+            name: 'padding1',
             type: {
-              array: ['u8', 64],
+              array: ['u8', 8],
+            },
+          },
+          {
+            name: 'padding2',
+            type: {
+              array: ['u8', 8],
+            },
+          },
+          {
+            name: 'padding3',
+            type: {
+              array: ['u8', 8],
+            },
+          },
+          {
+            name: 'padding4',
+            type: {
+              array: ['u8', 32],
             },
           },
         ],
