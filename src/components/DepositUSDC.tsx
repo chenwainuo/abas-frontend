@@ -2,7 +2,11 @@ import { FC, useCallback } from 'react';
 
 import { ClearingHouse } from '@drift-labs/sdk';
 import { Program } from '@project-serum/anchor';
-import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  Token,
+  TOKEN_PROGRAM_ID,
+} from '@solana/spl-token';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey, Transaction, TransactionSignature } from '@solana/web3.js';
 
@@ -131,7 +135,9 @@ export const DepositUSDC: FC<DepositUSDCProps> = (props) => {
 
     const quantityNative = new anchor.BN((100 / 2) * 1000000);
 
-    const userUsdcAtaAccount = await getAssociatedTokenAddress(
+    const userUsdcAtaAccount = await Token.getAssociatedTokenAddress(
+      ASSOCIATED_TOKEN_PROGRAM_ID,
+      TOKEN_PROGRAM_ID,
       USDC_MINT_KEY,
       publicKey
     );
@@ -218,7 +224,7 @@ export const DepositUSDC: FC<DepositUSDCProps> = (props) => {
     } finally {
       await clearingHouse.unsubscribe();
     }
-  }, [publicKey, notify, connection, sendTransaction]);
+  }, [wallet, publicKey, connection, sendTransaction]);
 
   if (!props.show || !props.butlerAccountOwner || !props.mangoAccount) {
     return <div></div>;
@@ -226,7 +232,7 @@ export const DepositUSDC: FC<DepositUSDCProps> = (props) => {
   return (
     <div>
       <button
-        className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500 ..."
+        className="btn m-2 bg-gradient-to-r from-[#9945FF] to-[#14F195] hover:from-pink-500 hover:to-yellow-500"
         onClick={onClick}
         disabled={!publicKey}
       >

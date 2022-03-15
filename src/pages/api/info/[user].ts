@@ -6,7 +6,11 @@ import {
 } from '@blockworks-foundation/mango-client';
 import { ClearingHouse, ClearingHouseUser } from '@drift-labs/sdk';
 import { BN, Program } from '@project-serum/anchor';
-import { getAssociatedTokenAddress } from '@solana/spl-token';
+import {
+  ASSOCIATED_TOKEN_PROGRAM_ID,
+  Token,
+  TOKEN_PROGRAM_ID,
+} from '@solana/spl-token';
 import { Connection, PublicKey } from '@solana/web3.js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -35,13 +39,18 @@ export type UserInfoData = {
   driftAccountValue: number;
   userUsdcBalance: number;
   driftFreeCollateral: number;
+  depositLimit: number;
+  mangoDailyFundingRateProfit: number;
+  driftDailyFundingRateProfit: number;
 };
 
 const getAccountBalance = async (
   connection: Connection,
   userPkey: PublicKey
 ): Promise<number> => {
-  const userUsdcAccount = await getAssociatedTokenAddress(
+  const userUsdcAccount = await Token.getAssociatedTokenAddress(
+    ASSOCIATED_TOKEN_PROGRAM_ID,
+    TOKEN_PROGRAM_ID,
     USDC_MINT_KEY,
     userPkey
   );
@@ -395,6 +404,7 @@ export default async function handler(
   const r = {
     accountInitialized: true,
     mangoAccount: mangoAccountPk,
+    depositLimit: 10000,
     positionUi: positionsUi,
     butlerAccountOwner: accountOwner,
     userConfig,

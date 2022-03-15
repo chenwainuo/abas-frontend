@@ -3,7 +3,11 @@ module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}'],
   darkMode: 'media',
   theme: {
-    extend: {},
+    extend: {
+      backgroundColor: {
+        depositModal: '#050910',
+      },
+    },
   },
   plugins: [require('daisyui'), require('@tailwindcss/typography')],
   daisyui: {
