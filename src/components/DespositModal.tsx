@@ -52,8 +52,8 @@ export const DepositModal = ({
   const { publicKey, sendTransaction, wallet } = useWallet();
   const remainingMaxDeposit = depositLimit - currentColateral;
   const isConfirmDisabled = useCallback(() => {
-    return depositAmount === '';
-  }, [depositAmount]);
+    return depositAmount === '' || depositOverWalletTotal || depositOverLimit;
+  }, [depositAmount, depositOverLimit, depositOverWalletTotal]);
 
   const inputError = useMemo(() => {
     if (depositOverWalletTotal) {
@@ -63,7 +63,7 @@ export const DepositModal = ({
       return 'Enter an amount less than deposit limit';
     }
     return '';
-  }, [depositAmount, usdcBalannce]);
+  }, [depositOverLimit, depositOverWalletTotal]);
 
   const onClick = useCallback(async () => {
     if (!publicKey) {
@@ -285,13 +285,18 @@ export const DepositModal = ({
         checked={isModalOpened}
       />
       <div className="modal">
-        <div className="modal-box relative p-0 rounded-md bg-depositModal">
+        <div className="modal-box relative p-0 rounded-md bg-depositModal pb-2">
           <div className="flex justify-between items-start rounded-t border-b border-gray-600 pt-5 pb-5 pr-7 pl-7">
             <h3 className="text-xl font-semibold lg:text-2xl  bg-clip-text text-transparent  bg-gradient-to-br from-[#9945FF] to-[#14F195]">
               Deposit
             </h3>
             <label
               onClick={() => {
+                setIsProcessing(false);
+                setDepositOverLimit(false);
+                setDepositOverWalletTotal(false);
+                setTotalColateral(currentColateral);
+                setDepositAmount('');
                 setIsModalOpened(false);
               }}
               htmlFor="deposit-modal"
@@ -320,6 +325,7 @@ export const DepositModal = ({
               </label>
               <Input
                 type="number"
+                value={depositAmount}
                 error={depositOverLimit || depositOverWalletTotal}
                 errorText={inputError}
                 leftIcon={<div>USDC</div>}
@@ -376,7 +382,7 @@ export const DepositModal = ({
             </div>
 
             <button
-              disabled={isConfirmDisabled() || depositOverLimit}
+              disabled={isConfirmDisabled()}
               onClick={onClick}
               className={`btn btn-wide w-full bg-gradient-to-r 
               from-[#9945FF] to-[#14F195]

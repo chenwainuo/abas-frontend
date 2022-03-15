@@ -6,7 +6,6 @@ const Input = (props) => {
     leftIcon,
     wrapperClassName = '',
     placeholder = '',
-    label = '',
     type = 'text',
     error = false,
     errorText = '',
