@@ -50,7 +50,8 @@ export const DepositModal = ({
 
   const { connection } = useConnection();
   const { publicKey, sendTransaction, wallet } = useWallet();
-  const remainingMaxDeposit = depositLimit - currentColateral;
+  const remainingMaxDeposit =
+    Math.floor((depositLimit - currentColateral) * 100) / 100;
   const isConfirmDisabled = useCallback(() => {
     return depositAmount === '' || depositOverWalletTotal || depositOverLimit;
   }, [depositAmount, depositOverLimit, depositOverWalletTotal]);
