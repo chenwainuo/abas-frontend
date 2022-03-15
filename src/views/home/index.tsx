@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import { useWallet } from '@solana/wallet-adapter-react';
 
+import { AccountDashboard } from '@/components/AccountDashboard';
 import { AccountTable } from '@/components/AccountTable';
 import { CreateButlerAccount } from '@/components/CreateButlerAccount';
 import { DepositModal } from '@/components/DespositModal';
@@ -37,8 +38,6 @@ export const HomeView: FC = () => {
     );
   }
 
-  console.log(data);
-
   return (
     <div className="p-4 py-4 mx-auto hero min-h-16">
       <div className="flex flex-col max-w-lg hero-content">
@@ -48,13 +47,7 @@ export const HomeView: FC = () => {
         <div className="p-2 text-center">
           {data.accountInitialized ? (
             <>
-              {!isLoading ? (
-                <p>
-                  {' '}
-                  Total Account Value: $
-                  {(data.driftAccountValue + data.mangoAccountValue).toFixed(2)}
-                </p>
-              ) : null}
+              <AccountDashboard publicKey={wallet.publicKey} />
               <a
                 target="_blank"
                 href={`https://app.drift.trade/AVAX?authority=${data.butlerAccountOwner.toString()}`}
