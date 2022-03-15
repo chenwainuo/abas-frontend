@@ -29,6 +29,8 @@ module.exports = {
     config.resolve.alias = {
       ...config.resolve.alias,
       // "@/*": ["./src/*"],
+      "@/stores": path.resolve(__dirname, "../src/stores"),
+      "@/models": path.resolve(__dirname, "../src/models"),
       "@/utils": path.resolve(__dirname, "../src/utils"),
       "@/components": path.resolve(__dirname, "../src/components")
     },
