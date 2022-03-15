@@ -4,7 +4,6 @@ import { useWallet } from '@solana/wallet-adapter-react';
 
 import { AccountTable } from '@/components/AccountTable';
 import { CreateButlerAccount } from '@/components/CreateButlerAccount';
-import { DepositUSDC } from '@/components/DepositUSDC';
 import { DepositModal } from '@/components/DespositModal';
 import { WithdrawUSDC } from '@/components/WithdrawUSDC';
 import { useUserInfoContext } from '@/contexts/UserInfoProvider';
@@ -74,36 +73,33 @@ export const HomeView: FC = () => {
                   Mango Account
                 </button>
               </a>
-              <DepositModal
-                usdcBalannce={data!.userUsdcBalance}
-                currentColateral={
-                  data!.driftAccountValue + data!.mangoAccountValue
-                }
-                depositLimit={data!.depositLimit}
-              />
-              <DepositUSDC
-                {...{
-                  mangoAccount: data.mangoAccount,
-                  butlerAccountOwner: data.butlerAccountOwner,
-                  show: data.accountInitialized,
-                }}
-              />
+              <div>
+                <DepositModal
+                  usdcBalannce={data!.userUsdcBalance}
+                  currentColateral={
+                    data!.driftAccountValue + data!.mangoAccountValue
+                  }
+                  depositLimit={data!.depositLimit}
+                  mangoAccount={data!.mangoAccount}
+                  butlerAccountOwner={data!.butlerAccountOwner}
+                />
+              </div>
               <WithdrawUSDC
                 {...{
-                  mangoAccount: data.mangoAccount,
-                  butlerAccountOwner: data.butlerAccountOwner,
-                  show: data.accountInitialized,
-                  driftFreeCollateral: data.driftFreeCollateral,
-                  mangoAccountValue: data.mangoAccountValue,
-                  positionUi: data.positionUi,
+                  mangoAccount: data!.mangoAccount,
+                  butlerAccountOwner: data!.butlerAccountOwner,
+                  show: data!.accountInitialized,
+                  driftFreeCollateral: data!.driftFreeCollateral,
+                  mangoAccountValue: data!.mangoAccountValue,
+                  positionUi: data!.positionUi,
                 }}
               />
               <AccountTable
                 {...{
-                  mangoAccount: data.mangoAccount,
-                  butlerAccountOwner: data.butlerAccountOwner,
-                  show: data.accountInitialized,
-                  rows: data.positionUi,
+                  mangoAccount: data!.mangoAccount,
+                  butlerAccountOwner: data!.butlerAccountOwner,
+                  show: data!.accountInitialized,
+                  rows: data!.positionUi,
                 }}
               />
             </>

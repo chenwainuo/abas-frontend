@@ -38,8 +38,10 @@ const Input = (props) => {
         ) : null}
       </div>
       {error ? (
-        <label>
-          <span className="text-xs  text-red-600">{errorText}</span>
+        <label className="label">
+          <span className="label-text-alt text-xs text-left  text-red-600">
+            {errorText}
+          </span>
         </label>
       ) : null}
     </div>
