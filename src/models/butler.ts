@@ -250,10 +250,6 @@ export type Butler = {
           type: 'u32';
         },
         {
-          name: 'totalDeposited';
-          type: 'u64';
-        },
-        {
           name: 'mode';
           type: 'u8';
         }
@@ -275,7 +271,7 @@ export type Butler = {
         {
           name: 'signer';
           isMut: true;
-          isSigner: true;
+          isSigner: false;
         }
       ];
       args: [
@@ -1718,10 +1714,6 @@ export const IDL: Butler = {
           type: 'u32',
         },
         {
-          name: 'totalDeposited',
-          type: 'u64',
-        },
-        {
           name: 'mode',
           type: 'u8',
         },
@@ -1743,7 +1735,7 @@ export const IDL: Butler = {
         {
           name: 'signer',
           isMut: true,
-          isSigner: true,
+          isSigner: false,
         },
       ],
       args: [
