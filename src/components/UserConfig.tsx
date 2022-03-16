@@ -239,9 +239,12 @@ export const UserConfig: FC<UserConfigProps> = (props) => {
               onChange={handleOpenSpreadChange}
               input={<BootstrapInput />}
             >
+              <MenuItem value={55}>0.55%</MenuItem>
               <MenuItem value={50}>0.50%</MenuItem>
               <MenuItem value={45}>0.45%</MenuItem>
+              <MenuItem value={35}>0.35%</MenuItem>
               <MenuItem value={30}>0.30%</MenuItem>
+              <MenuItem value={25}>0.25%</MenuItem>
               <MenuItem value={15}>0.15%</MenuItem>
             </Select>
           </FormControl>
@@ -259,10 +262,10 @@ export const UserConfig: FC<UserConfigProps> = (props) => {
               onChange={handleCloseSpreadChange}
               input={<BootstrapInput />}
             >
-              <MenuItem value={30}>0.30%</MenuItem>
               <MenuItem value={15}>0.15%</MenuItem>
-              <MenuItem value={10}>0.10%</MenuItem>
+              <MenuItem value={5}>0.10%</MenuItem>
               <MenuItem value={0}>0%</MenuItem>
+              <MenuItem value={-5}>-0.5%</MenuItem>
               <MenuItem value={-10}>-0.10%</MenuItem>
               <MenuItem value={-15}>-0.15%</MenuItem>
               <MenuItem value={-30}>-0.30%</MenuItem>
